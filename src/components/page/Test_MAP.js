@@ -9,7 +9,8 @@ import SearchPlace from "pages/SearchPlace";
 const Test_MAP = () => {
     const [select,setSelect]=useState(""); //버튼
     const [place, setPlace] = useState(""); // 지정 장소 선택
-    const [locPosition, setLocPosition] = useState("");
+    const [locPosition, setLocPosition] = useState({});
+    
     const [map, setMap] = useState()
     const { Search } = Input;
 
@@ -51,7 +52,7 @@ const Test_MAP = () => {
     }
     */
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         // 현재 위치 가져오기
         // HTML5의 geolocation으로 사용할 수 있는지 확인합니다 
         var lat, lon;
@@ -62,23 +63,21 @@ const Test_MAP = () => {
                 
                 lat = position.coords.latitude; // 위도
                 lon = position.coords.longitude; // 경도
-
-                console.log(locPosition)
-                setLocPosition("1234")
-                console.log(locPosition)
+                
                 setLocPosition(new kakao.maps.LatLng(lat, lon)) // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다;    
-                console.log(locPosition)
                 
                 console.log("현재 위치는 ", lat,", ", lon, " 입니다.");
                 // setMap(map.setCenter(locPosition));
             });
-            
+          
+            sessionStorage.setItem('Location', JSON.stringify(locPosition));
+           
         } else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
             console.log("위치를 사용할 수 없습니다.");
         }
-        // console.log(locPosition);
+        
     }, [])
-
+    
     return(
         <>
         
@@ -97,7 +96,7 @@ const Test_MAP = () => {
             </Space>
             
             {/* <MapContainer searchPlace={place} />  */}
-            <SearchPlace searchPlace={place, locPosition} />
+            <SearchPlace searchPlace={place} />
         </ Form>
         
         

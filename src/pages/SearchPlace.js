@@ -5,7 +5,7 @@ import { MapMarker } from "react-kakao-maps-sdk";
 import { useState } from "react";
 import { useEffect } from "react";
 
-const SearchPlace= ({ searchPlace, locPosition }) =>{
+const SearchPlace= ({ searchPlace }) =>{
   const [info, setInfo] = useState()
   const [markers, setMarkers] = useState([])
   const [map, setMap] = useState()
@@ -13,10 +13,15 @@ const SearchPlace= ({ searchPlace, locPosition }) =>{
   useEffect(() => { 
     if (!map) return
     
-    console.log(locPosition);
+    // console.log(locPosition);
     //map.setCenter(location);
     // 장소 검색 객체 생성
     const ps = new kakao.maps.services.Places(map)
+    
+    
+    //세션 스토리지 정보 가져오기.
+    console.log(JSON.parse(sessionStorage.getItem('Location'))) //이 값을 따로 변수로 받아서 사용하면 될 것 같습니다
+
 
     ps.keywordSearch(searchPlace, (data, status, _pagination) => {
       if (status === kakao.maps.services.Status.OK) {
