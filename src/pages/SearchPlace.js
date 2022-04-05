@@ -9,13 +9,19 @@ const SearchPlace= ({ searchPlace }) =>{
   const [info, setInfo] = useState()
   const [markers, setMarkers] = useState([])
   const [map, setMap] = useState()
-  const locFromSession=JSON.parse(sessionStorage.getItem('Location'))  //세션 스토리지에 저장된 Item을 변수에 저장
+
+  const Lon=sessionStorage.getItem('lon')
+  const Lat=sessionStorage.getItem('lat')
+  const localPosition= (new kakao.maps.LatLng(Lat, Lon))
+  
   useEffect(() => { 
     if (!map) return
     
    
     const ps = new kakao.maps.services.Places(map)
-    console.log(locFromSession) //현재 좌표값 반환
+    console.log(Lon, Lat) //현재 좌표값 반환
+    console.log(localPosition)
+    
     ps.keywordSearch(searchPlace, (data, status, _pagination) => {
       if (status === kakao.maps.services.Status.OK) {
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
@@ -49,8 +55,8 @@ const SearchPlace= ({ searchPlace }) =>{
   return (
     <Map // 로드뷰를 표시할 Container
       center={{
-        lat: 37.566826,
-        lng: 126.9786567,
+        lat: Lat,
+        lng: Lon,
       }}
       style={{
         width: "100%",

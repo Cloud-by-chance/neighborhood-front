@@ -52,31 +52,36 @@ const Test_MAP = () => {
     }
     */
 
-    useEffect(() => {
-        // 현재 위치 가져오기
-        // HTML5의 geolocation으로 사용할 수 있는지 확인합니다 
-        var lat, lon;
+    // useEffect(() => {
+    //     // 현재 위치 가져오기
+    //     // HTML5의 geolocation으로 사용할 수 있는지 확인합니다 
+    //     var lat, lon;
         
-        if (navigator.geolocation) {      
-            // GeoLocation을 이용해서 접속 위치를 얻어옵니다
-            navigator.geolocation.getCurrentPosition(function(position) {
+    //     if (navigator.geolocation) {      
+    //         // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+    //         navigator.geolocation.getCurrentPosition(function(position) {
                 
-                lat = position.coords.latitude; // 위도
-                lon = position.coords.longitude; // 경도
+    //             lat = position.coords.latitude;   // 위도
+    //             lon = position.coords.longitude;  // 경도
                 
-                setLocPosition(new kakao.maps.LatLng(lat, lon)) // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다;    
+    //             // setLocPosition(new kakao.maps.LatLng(lat, lon)) // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다;    
                 
-                console.log("현재 위치는 ", lat,", ", lon, " 입니다.");
-                // setMap(map.setCenter(locPosition));
-            });
+    //             console.log("현재 위치는 ", lat,", ", lon, " 입니다.");
+                
+    //             sessionStorage.setItem('lat', JSON.stringify(lat));
+    //             sessionStorage.setItem('lon', JSON.stringify(lon));
+
+    //             // setMap(map.setCenter(locPosition));
+    //         });
           
-            sessionStorage.setItem('Location', JSON.stringify(locPosition));
+            
+    //         // console.log(locPosition)
            
-        } else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
-            console.log("위치를 사용할 수 없습니다.");
-        }
+    //     } else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
+    //         console.log("위치를 사용할 수 없습니다.");
+    //     }
         
-    }, [])
+    // }, [])
     
     return(
         <>
