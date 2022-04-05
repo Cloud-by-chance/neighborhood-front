@@ -2,43 +2,44 @@ import React, {useState} from 'react'
 import KakaoLogin from 'react-kakao-login'
 import styled from 'styled-components'
 import KAKAO_KEY from '../oauth/KAKAO_KEY'
+import { KAKAO_AUTH_URL } from "oauth/OAuth";
 
-const Login = () => {
-    const [id, setId] = useState("") 
-    const [accessToken, setAccessToken] = useState("")
-    const [refreshToken, setRefreshToken] = useState("")
-    const [provider, setProvider] = useState('kakao')
+ const Login = () => {
+//     const [id, setId] = useState("") 
+//     const [accessToken, setAccessToken] = useState("")
+//     const [refreshToken, setRefreshToken] = useState("")
+//     const [provider, setProvider] = useState('kakao')
 
-    const responseKakao=(res)=>{
-        setAccessToken(res.response.access_token)
-        const {
-            profile: {
-                id: id
-            },
-            response:{
-                access_token: accessToken,
-                refresh_token: refreshToken
-            }
-        } = res       
+//     const responseKakao=(res)=>{
+//         setAccessToken(res.response.access_token)
+//         const {
+//             profile: {
+//                 id: id
+//             },
+//             response:{
+//                 access_token: accessToken,
+//                 refresh_token: refreshToken
+//             }
+//         } = res       
 
-        // 서버에게 token넘겨주기
-    }
+//         // 서버에게 token넘겨주기
+//     }
 
-    const responseFail = (err) => {
-        console.log(err)
-    }
+//     const responseFail = (err) => {
+//         console.log(err)
+//     }
 
-    return(
-        <div>
-            <KakaoBtn
-                jsKey={KAKAO_KEY}
-                onSuccess={responseKakao}
-                onFailure={responseFail}
-                getProfile="true"
-                buttonText="Login with Kakao"
+     return(
+         <div>
+            <KakaoBtn href={KAKAO_AUTH_URL}
+                 jsKey={KAKAO_KEY}
+                 //onSuccess={responseKakao}
+                 //onFailure={responseFail}
+                 getProfile="true"
+                 buttonText="Login with Kakao"
             />
-        </div>
-    );
+         </div>
+     );
 }
 
 export default Login;
