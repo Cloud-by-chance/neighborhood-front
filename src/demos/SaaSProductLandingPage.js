@@ -22,7 +22,8 @@ import { ReactComponent as MoneyIcon } from "feather-icons/dist/icons/dollar-sig
 import Map from "pages/Maps";
 import { Route } from "react-router-dom";
 import Signup from "pages/Signup";
-import Login from "pages/Login";
+//import Login from "pages/Login";
+import Login from "oauth/Login"
 import PostNew from "pages/PostNew";
 import AboutUs from "pages/AboutUs";
 import Home from "pages/CommunityHome";
@@ -62,7 +63,7 @@ export default () => {
     <AnimationRevealPage>
       <Route exact path="/" component={Hero} />
       <Route exact path="/accounts/signup" component={Signup} />
-      <Route exact path="/accounts/login" component={Login} />
+      <Route exact path="/oauth/login" component={Login} />
       <Route exact path="/maps" component={Test_MAP} />
       <Route exact path="/community" component={Home} />
       <Route exact path="/about" component={AboutUs} />
