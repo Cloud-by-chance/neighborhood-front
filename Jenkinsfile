@@ -10,22 +10,8 @@ pipeline {
               }
           }
 
-	stage('Checkout Application Git Branch') {
-        
-	steps {
-                url: 'https://github.com/Cloud-by-chance/neighborhood-front.git',
-                branch: 'main'
-        }
-        post {
-                failure {
-                  echo 'Repository clone failure !'
-                }
-                success {
-                  echo 'Repository clone success !'
-                }
-        }
     }
   }
   
-}
+
 
