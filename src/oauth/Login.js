@@ -1,62 +1,59 @@
-import React, {useState} from 'react'
-import KakaoLogin from 'react-kakao-login'
-import styled from 'styled-components'
-import KAKAO_KEY from '../oauth/KAKAO_KEY'
-import { KAKAO_AUTH_URL } from "oauth/OAuth";
+import React, { useState } from "react";
+import styled from "styled-components";
+import { Button } from "antd";
+import { KAKAO_AUTH_URL } from "../oauth/OAuth";
 
- const Login = () => {
-//     const [id, setId] = useState("") 
-//     const [accessToken, setAccessToken] = useState("")
-//     const [refreshToken, setRefreshToken] = useState("")
-//     const [provider, setProvider] = useState('kakao')
+const Login = () => {
+  console.log(KAKAO_AUTH_URL);
 
-//     const responseKakao=(res)=>{
-//         setAccessToken(res.response.access_token)
-//         const {
-//             profile: {
-//                 id: id
-//             },
-//             response:{
-//                 access_token: accessToken,
-//                 refresh_token: refreshToken
-//             }
-//         } = res       
+  const [id, setId] = useState("");
+  const [accessToken, setAccessToken] = useState("");
+  const [refreshToken, setRefreshToken] = useState("");
+  const [provider, setProvider] = useState("kakao");
 
-//         // 서버에게 token넘겨주기
-//     }
+  const clickHandler = () => {
+    <KaKaoBtn href={KAKAO_AUTH_URL}></KaKaoBtn>;
+  };
 
-//     const responseFail = (err) => {
-//         console.log(err)
-//     }
+  const responseKakao = (res) => {
+    setAccessToken(res.response.access_token);
+    const {
+      profile: { id: id },
+      response: { access_token: accessToken, refresh_token: refreshToken },
+    } = res;
 
-     return(
-         <div>
-            <KakaoBtn href={KAKAO_AUTH_URL}
-                 jsKey={KAKAO_KEY}
-                 //onSuccess={responseKakao}
-                 //onFailure={responseFail}
-                 getProfile="true"
-                 buttonText="Login with Kakao"
-            />
-         </div>
-     );
-}
+    // 서버에게 token넘겨주기
+  };
+
+  const responseFail = (err) => {
+    console.log(err);
+  };
+
+  return (
+    <>
+      <KaKaoBtn href={KAKAO_AUTH_URL} type="primary">
+        카카오로그인
+      </KaKaoBtn>
+    </>
+  );
+};
 
 export default Login;
 
-const KakaoBtn = styled(KakaoLogin)`
-    padding: 0;
-    width: 190px;
-    height: 44px;
-    line-height: 44px;
-    color: #783c00;
-    background-color: #FFEB00;
-    border: 1px solid transparent;
-    border-radius: 3px;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    cursor: pointer;
-    &:hover{
-        box-shadow: 0 0px 15px 0 rgba(0, 0, 0, 0.2)
-    }`;
+const KaKaoBtn = styled(Button)`
+  padding: 0;
+  width: 190px;
+  height: 32px;
+  line-height: 44px;
+  color: #783c00;
+  background-color: #ffeb00;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  &:hover {
+    box-shadow: 0 0px 15px 0 rgba(0, 0, 0, 0.2);
+  }
+`;

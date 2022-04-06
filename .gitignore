@@ -197,7 +197,7 @@ $RECYCLE.BIN/
 !.yarn/cache
 
 # KAKAO LOGIN KEY
-src/oauth/KAKAO_KEY
+src/oauth/KAKAO_KEY.js
 
 # and uncomment the following lines
 # .pnp.*

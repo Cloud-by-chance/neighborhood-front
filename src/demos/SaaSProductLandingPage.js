@@ -23,54 +23,50 @@ import Map from "pages/Maps";
 import { Route } from "react-router-dom";
 import Signup from "pages/Signup";
 //import Login from "pages/Login";
-import Login from "oauth/Login"
+import Login from "oauth/Login";
 import PostNew from "pages/PostNew";
 import AboutUs from "pages/AboutUs";
 import Home from "pages/CommunityHome";
-import KakaoRedirectHandler from "oauth/callback/kakao"
+import Kakao from "oauth/callback/kakao";
 import PortfolioTwoCardsWithImage from "components/cards/PortfolioTwoCardsWithImage";
 // import SearchPlace from "pages/SearchPlace";
 import Test_MAP from "components/page/Test_MAP";
 export default () => {
   const Subheading = tw.span`uppercase tracking-widest font-bold text-primary-500`;
   const HighlightedText = tw.span`text-primary-500`;
-  
-  var lat, lon;      
-        if (navigator.geolocation) {      
-            // GeoLocation을 이용해서 접속 위치를 얻어옵니다
-            navigator.geolocation.getCurrentPosition(function(position) {
-                
-                lat = position.coords.latitude;   // 위도
-                lon = position.coords.longitude;  // 경도
-                
-                // setLocPosition(new kakao.maps.LatLng(lat, lon)) // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다;    
-                
-                console.log("현재 위치는 ", lat,", ", lon, " 입니다.");
-                
-                sessionStorage.setItem('lat', JSON.stringify(lat));
-                sessionStorage.setItem('lon', JSON.stringify(lon));
 
-                // setMap(map.setCenter(locPosition));
-            });
-          
-            
-            // console.log(locPosition)
-           
-        } else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
-            console.log("위치를 사용할 수 없습니다.");
-        }
+  var lat, lon;
+  if (navigator.geolocation) {
+    // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+    navigator.geolocation.getCurrentPosition(function (position) {
+      lat = position.coords.latitude; // 위도
+      lon = position.coords.longitude; // 경도
+
+      // setLocPosition(new kakao.maps.LatLng(lat, lon)) // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다;
+
+      console.log("현재 위치는 ", lat, ", ", lon, " 입니다.");
+
+      sessionStorage.setItem("lat", JSON.stringify(lat));
+      sessionStorage.setItem("lon", JSON.stringify(lon));
+
+      // setMap(map.setCenter(locPosition));
+    });
+
+    // console.log(locPosition)
+  } else {
+    // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
+    console.log("위치를 사용할 수 없습니다.");
+  }
   return (
-
     <AnimationRevealPage>
       <Route exact path="/" component={Hero} />
       <Route exact path="/accounts/signup" component={Signup} />
-      <Route exact path="/oauth/login" component={Login} />
-      <Route exact path="/oauth/callback/kakao" component={KakaoRedirectHandler} />
+      <Route exact path="/oauth/Login" component={Login} />
+      <Route path="/oauth/callback/kakao" component={Kakao} />
       <Route exact path="/maps" component={Test_MAP} />
       <Route exact path="/community" component={Home} />
       <Route exact path="/about" component={AboutUs} />
       <Route exact path="/community/posts/new" component={PostNew} />
     </AnimationRevealPage>
-    
   );
-}
+};
