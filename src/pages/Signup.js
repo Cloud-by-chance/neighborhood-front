@@ -10,6 +10,13 @@ import googleIconImageSrc from "images/google-icon.png";
 import twitterIconImageSrc from "images/twitter-icon.png";
 import { ReactComponent as SignUpIcon } from "feather-icons/dist/icons/user-plus.svg";
 
+//Additional Parts
+import { axiosInstance } from "components/api";
+import { useHistory } from "react-router-dom";
+import { useState } from "react";
+import { useEffect } from "react";
+
+
 const Container = tw(ContainerBase)`min-h-screen bg-primary-900 text-white font-medium flex justify-center -m-8`;
 const Content = tw.div`max-w-screen-xl m-0 sm:mx-20 sm:my-16 bg-white text-gray-900 shadow sm:rounded-lg flex justify-center flex-1`;
 const MainContainer = tw.div`lg:w-1/2 xl:w-5/12 p-6 sm:p-12`;
@@ -53,8 +60,38 @@ const IllustrationImage = styled.div`
   ${tw`m-12 xl:m-16 w-full max-w-lg bg-contain bg-center bg-no-repeat`}
 `;
 
-export default ({
-  logoLinkUrl = "#",
+
+//여기가 새로 살 붙인 부분 onChange와 onSubmit이다. 
+// const [inputs, setInputs] = useState({ username: "", password: "" });
+
+
+function Signup() {
+  const [inputs, setInputs] = useState({ Email: "", Password: "" });
+  const [formDisable, setFormDisable] = useState(true);
+  const history= useHistory();
+
+  // useEffect(() => {
+  //   const isEnable = Object.values(inputs).every((s) => s.length > 0); //문자열이 전부다 0보다 커야됨
+  //   // const isEnable = inputs.username.length > 0 && inputs.password.length > 0;
+  //   setFormDisable(!isEnable);
+  // }, [inputs]);
+  const onSubmit=(e) =>{
+    console.log("제출 완료")
+    
+    console.log(setInputs)
+  };
+
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    
+    setInputs({
+      ...inputs, //이전 inputs 값을 받아와서 이어써주기 위해 사용한다
+      [name]: value, //여기서 []은 리스트 ,array가 아니라 이 식을 평가하라는 뜻이다(in javascript)
+    });
+    console.log(inputs)
+  };
+  
+  const logoLinkUrl = "/",
   illustrationImageSrc = illustration,
   headingText = "Sign Up For 우리동네 정보",
   socialButtons = [
@@ -69,12 +106,11 @@ export default ({
       url: "https://twitter.com"
     }
   ],
-  submitButtonText = "Sign Up",
+  submitButtonText = "Sign Up!",
   SubmitButtonIcon = SignUpIcon,
-  tosUrl = "#",
-  privacyPolicyUrl = "#",
-  signInUrl = "#"
-}) => (
+  signInUrl = "/accounts/login"
+
+return (
   <AnimationRevealPage>
     <Container>
       <Content>
@@ -98,14 +134,14 @@ export default ({
               <DividerTextContainer>
                 <DividerText>Or Sign up with your e-mail</DividerText>
               </DividerTextContainer>
-              <Form>
-                <Input type="email" placeholder="Email" />
-                <Input type="password" placeholder="Password" />
+              <Form  onSubmit={onSubmit}>
+                <Input type="email" name="Email" placeholder="Email" onChange={onChange}/>
+                <Input type="password" name="Password" placeholder="Password" onChange={onChange} />
                 <SubmitButton type="submit">
                   <SubmitButtonIcon className="icon" />
                   <span className="text">{submitButtonText}</span>
                 </SubmitButton>
-                <p tw="mt-6 text-xs text-gray-600 text-center">
+                {/* <p tw="mt-6 text-xs text-gray-600 text-center">
                   I agree to abide by treact's{" "}
                   <a href={tosUrl} tw="border-b border-gray-500 border-dotted">
                     Terms of Service
@@ -114,7 +150,7 @@ export default ({
                   <a href={privacyPolicyUrl} tw="border-b border-gray-500 border-dotted">
                     Privacy Policy
                   </a>
-                </p>
+                </p> */}
 
                 <p tw="mt-8 text-sm text-gray-600 text-center">
                   Already have an account?{" "}
@@ -133,3 +169,5 @@ export default ({
     </Container>
   </AnimationRevealPage>
 );
+            }
+export default Signup
