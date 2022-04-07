@@ -7,7 +7,7 @@ const Kakao = async () => {
   try {
     let code = new URL(window.location.href).searchParams.get("code");
     const result = await axios
-      .get(`http://localhost:8081/oauth/callback/kakako?code=${code}`, {
+      .get(`oauth/callback/kakako?code=${code}`, {
         headers: {
           "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
         },
