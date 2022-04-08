@@ -1,11 +1,15 @@
 pipeline {
   agent any
+  environment{
+    dockerHubRegistry = 'bluetic321/cicd-test'
+    dockerHubRegistryCredential = 'docker-hub-credential'
+  }
 
   stages {
 
     stage('Checkout Application Git Branch') {
         steps {
-            git url: 'https://github.com/Cloud-by-chance/neighborhood-front.git',
+                url: 'https://github.com/Cloud-by-chance/neighborhood-front.git',
                 branch: 'main'
         }
         post {
@@ -17,7 +21,44 @@ pipeline {
                 }
         }
     }
-  }
-  
+    stage('Docker Image Build') {
+        steps {
+            sh "docker build . -t ${dockerHubRegistry}:${currentBuild.number}"
+            sh "docker build . -t ${dockerHubRegistry}:latest"
+        }
+        post {
+                failure {
+                  echo 'Docker image build failure !'
+                }
+                success {
+                  echo 'Docker image build success !'
+                }
+        }
+    }
+    stage('Docker Image Push') {
+        steps {
+            withDockerRegistry([ credentialsId: dockerHubRegistryCredential, url: "" ]) {
+                                sh "docker push ${dockerHubRegistry}:${currentBuild.number}"
+                                sh "docker push ${dockerHubRegistry}:latest"
+
+                                sleep 10 /* Wait uploading */ 
+                            }
+        }
+        post {
+                failure {
+                  echo 'Docker Image Push failure !'
+                  sh "docker rmi ${dockerHubRegistry}:${currentBuild.number}"
+                  sh "docker rmi ${dockerHubRegistry}:latest"
+                }
+                success {
+                  echo 'Docker image push success !'
+                  sh "docker rmi ${dockerHubRegistry}:${currentBuild.number}"
+                  sh "docker rmi ${dockerHubRegistry}:latest"
+                }
+        }
+    }  
+
+
+  }  
 }
 
