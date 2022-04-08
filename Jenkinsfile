@@ -9,7 +9,7 @@ pipeline {
 
     stage('Checkout Application Git Branch') {
         steps {
-                url: 'https://github.com/Cloud-by-chance/neighborhood-front.git',
+                git url: 'https://github.com/Cloud-by-chance/neighborhood-front.git',
                 branch: 'main'
         }
         post {
