@@ -3,6 +3,7 @@ pipeline {
   environment {
     dockerHubRegistry = 'bluetic321/cicd-test'
     dockerHubRegistryCredential = 'docker-hub-credential'
+    githubCredential = 'git-hub-credential'
   }
 
   stages {
@@ -37,7 +38,7 @@ pipeline {
     }
     stage('Docker Image Push') {
         steps {
-            withDockerRegistry([ credentialsId: 'docker-hub-credential', url: "" ]) {
+            withDockerRegistry([ credentialsId: 'docker-hub-credential' , url: "" ]) {
                                 sh "docker push ${dockerHubRegistry}:${currentBuild.number}"
                                 sh "docker push ${dockerHubRegistry}:latest"
 
@@ -57,7 +58,30 @@ pipeline {
                 }
         }
     }  
+    stage('K8S Manifest Update') {
+        steps {
+            git credentialsId: 'git-hub-credential',
+                url: 'https://github.com/Cloud-by-chance/neighborhood-manifest.git',
+                branch: 'main'
 
+            sh "sed -i 's/cicd-test:.*\$/cicd-test:${currentBuild.number}/g' deployment.yaml"
+            sh "git add deployment.yaml"
+            sh "git commit -m '[UPDATE] cicd-test ${currentBuild.number} image versioning'"
+            sh "git push -u origin main"
+            /*sshagent(credentials: ['{githubCredential}']) {
+                sh "git remote set-url origin git@https://github.com/Cloud-by-chance/neighborhood-manifest.git"
+                sh "git push -u origin main"
+             }*/
+        }
+        post {
+                failure {
+                  echo 'K8S Manifest Update failure !'
+                }
+                success {
+                  echo 'K8S Manifest Update success !'
+                }
+        }
+    }
 
   }  
 }
