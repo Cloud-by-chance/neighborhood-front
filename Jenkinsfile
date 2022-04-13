@@ -47,13 +47,13 @@ pipeline {
         post {
                 failure {
                   echo 'Docker Image Push failure !'
-                  sh "sudo docker rmi ${dockerHubRegistry}:${currentBuild.number}"
-                  sh "sudo docker rmi ${dockerHubRegistry}:latest"
+                  sh "docker rmi ${dockerHubRegistry}:${currentBuild.number}"
+                  sh "docker rmi ${dockerHubRegistry}:latest"
                 }
                 success {
                   echo 'Docker image push success !'
-                  sh "sudo docker rmi ${dockerHubRegistry}:${currentBuild.number}"
-                  sh "sudo docker rmi ${dockerHubRegistry}:latest"
+                  sh "docker rmi ${dockerHubRegistry}:${currentBuild.number}"
+                  sh "docker rmi ${dockerHubRegistry}:latest"
                 }
         }
     }  
