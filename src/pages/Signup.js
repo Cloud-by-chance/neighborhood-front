@@ -7,8 +7,10 @@ import { css } from "styled-components/macro"; //eslint-disable-line
 import illustration from "images/signup-illustration.svg";
 import logo from "images/logo.svg";
 import googleIconImageSrc from "images/google-icon.png";
-import twitterIconImageSrc from "images/twitter-icon.png";
+import kakaoIconImageSrc from "images/kakao-icon.png";
 import { ReactComponent as SignUpIcon } from "feather-icons/dist/icons/user-plus.svg";
+import { Button } from "antd";
+import { KAKAO_AUTH_URL } from "../oauth/OAuth";
 
 //Additional Parts
 import { axiosInstance } from "components/api";
@@ -17,8 +19,9 @@ import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 
-
-const Container = tw(ContainerBase)`min-h-screen bg-primary-900 text-white font-medium flex justify-center -m-8`;
+const Container = tw(
+  ContainerBase
+)`min-h-screen bg-primary-900 text-white font-medium flex justify-center -m-8`;
 const Content = tw.div`max-w-screen-xl m-0 sm:mx-20 sm:my-16 bg-white text-gray-900 shadow sm:rounded-lg flex justify-center flex-1`;
 const MainContainer = tw.div`lg:w-1/2 xl:w-5/12 p-6 sm:p-12`;
 const LogoLink = tw.a``;
@@ -57,122 +60,150 @@ const SubmitButton = styled.button`
 `;
 const IllustrationContainer = tw.div`sm:rounded-r-lg flex-1 bg-purple-100 text-center hidden lg:flex justify-center`;
 const IllustrationImage = styled.div`
-  ${props => `background-image: url("${props.imageSrc}");`}
+  ${(props) => `background-image: url("${props.imageSrc}");`}
   ${tw`m-12 xl:m-16 w-full max-w-lg bg-contain bg-center bg-no-repeat`}
 `;
 
-
-//여기가 새로 살 붙인 부분 onChange와 onSubmit이다. 
+//여기가 새로 살 붙인 부분 onChange와 onSubmit이다.
 // const [inputs, setInputs] = useState({ username: "", password: "" });
 
 function Signup() {
-  const [inputs, setInputs] = useState({ user_id:"",nick_name: " " ,email: "", password: "" });
+  const [inputs, setInputs] = useState({
+    user_id: "",
+    nick_name: " ",
+    email: "",
+    password: "",
+  });
   const [formDisable, setFormDisable] = useState(true);
-  const history= useHistory();
+  const history = useHistory();
 
-  const onSubmit=(e) =>{ // 내가 버튼 눌러서 Submit이 된 경우 실행될 함수!
+  const onSubmit = (e) => {
+    // 내가 버튼 눌러서 Submit이 된 경우 실행될 함수!
     var headers = {
-      'Content-Type': 'application/json' 
-  }
+      "Content-Type": "application/json",
+    };
     e.preventDefault();
-    console.log(inputs)
+    console.log(inputs);
     axiosInstance
-    .post("/v1/signup",JSON.stringify(inputs),{headers})
-    .then((response) =>{
-      console.log("response:", response);
-      history.push("/accounts/login");
-    })
-    .catch((error) => {
-      if (error.response){
-        console.log("Error 발생!");
-      }
-    })
+      .post("/v1/signup", JSON.stringify(inputs), { headers })
+      .then((response) => {
+        console.log("response:", response);
+        history.push("/accounts/login");
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.log("Error 발생!");
+        }
+      });
   };
 
   const onChange = (e) => {
     const { name, value } = e.target;
-    
+
     setInputs({
       ...inputs, //이전 inputs 값을 받아와서 이어써주기 위해 사용한다
       [name]: value, //여기서 []은 리스트 ,array가 아니라 이 식을 평가하라는 뜻이다(in javascript)
     });
-
   };
-  
+
   const logoLinkUrl = "/",
-  illustrationImageSrc = illustration,
-  headingText = "Sign Up For 우리동네 정보",
-  socialButtons = [
-    {
-      iconImageSrc: googleIconImageSrc,
-      text: "Sign Up With Google",
-      url: "https://google.com"
-    },
-    {
-      iconImageSrc: twitterIconImageSrc,
-      text: "Sign Up With Twitter",
-      url: "https://twitter.com"
-    }
-  ],
-  submitButtonText = "Sign Up!",
-  SubmitButtonIcon = SignUpIcon,
-  signInUrl = "/accounts/login"
+    illustrationImageSrc = illustration,
+    headingText = "Sign Up For 우리동네 정보",
+    socialButtons = [
+      {
+        iconImageSrc: googleIconImageSrc,
+        text: "Sign Up With Google",
+        url: "https://google.com",
+      },
+      {
+        iconImageSrc: kakaoIconImageSrc,
+        text: "Sign Up With Kakao",
+        url: KAKAO_AUTH_URL,
+      },
+    ],
+    submitButtonText = "Sign Up!",
+    SubmitButtonIcon = SignUpIcon,
+    signInUrl = "/accounts/login";
 
-return (
-  <AnimationRevealPage>
-    <Container>
-      <Content>
-        <MainContainer>
-          <LogoLink href={logoLinkUrl}>
-            <LogoImage src={logo} />
-          </LogoLink>
-          <MainContent>
-            <Heading>{headingText}</Heading>
-            <FormContainer>
-              <SocialButtonsContainer>
-                {socialButtons.map((socialButton, index) => (
-                  <SocialButton key={index} href={socialButton.url}>
-                    <span className="iconContainer">
-                      <img src={socialButton.iconImageSrc} className="icon" alt="" />
-                    </span>
-                    <span className="text">{socialButton.text}</span>
-                  </SocialButton>
-                ))}
-              </SocialButtonsContainer>
-              <DividerTextContainer>
-                <DividerText>Or Sign up with your e-mail</DividerText>
-              </DividerTextContainer>
+  return (
+    <AnimationRevealPage>
+      <Container>
+        <Content>
+          <MainContainer>
+            <LogoLink href={logoLinkUrl}>
+              <LogoImage src={logo} />
+            </LogoLink>
+            <MainContent>
+              <Heading>{headingText}</Heading>
+              <FormContainer>
+                <SocialButtonsContainer>
+                  {socialButtons.map((socialButton, index) => (
+                    <SocialButton key={index} href={socialButton.url}>
+                      <span className="iconContainer">
+                        <img
+                          src={socialButton.iconImageSrc}
+                          className="icon"
+                          alt=""
+                        />
+                      </span>
+                      <span className="text">{socialButton.text}</span>
+                    </SocialButton>
+                  ))}
+                </SocialButtonsContainer>
+                <DividerTextContainer>
+                  <DividerText>Or Sign up with your e-mail</DividerText>
+                </DividerTextContainer>
 
-              
-              <Form  onSubmit={onSubmit}>
-               <Input type="text" name="user_id" placeholder="사용할 ID를 입력하세요" onChange={onChange} />
-               <Input type="text" name="nick_name" placeholder="이름" onChange={onChange} />
-                <Input type="email" name="email" placeholder="E - Mail" onChange={onChange}/>
-                <Input type="password" name="password" placeholder="Password" onChange={onChange} />
-                
-                
-                <SubmitButton type="submit">
-                  <SubmitButtonIcon className="icon" />
-                  <span className="text">{submitButtonText}</span>
-                </SubmitButton>
-             
+                <Form onSubmit={onSubmit}>
+                  <Input
+                    type="text"
+                    name="user_id"
+                    placeholder="사용할 ID를 입력하세요"
+                    onChange={onChange}
+                  />
+                  <Input
+                    type="text"
+                    name="nick_name"
+                    placeholder="이름"
+                    onChange={onChange}
+                  />
+                  <Input
+                    type="email"
+                    name="email"
+                    placeholder="E - Mail"
+                    onChange={onChange}
+                  />
+                  <Input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    onChange={onChange}
+                  />
 
-                <p tw="mt-8 text-sm text-gray-600 text-center">
-                  Already have an account?{" "}
-                  <a href={signInUrl} tw="border-b border-gray-500 border-dotted">
-                    Sign In
-                  </a>
-                </p>
-              </Form>
-            </FormContainer>
-          </MainContent>
-        </MainContainer>
-        <IllustrationContainer>
-          <IllustrationImage imageSrc={illustrationImageSrc} />
-        </IllustrationContainer>
-      </Content>
-    </Container>
-  </AnimationRevealPage>
-);
-            }
-export default Signup
+                  <SubmitButton type="submit">
+                    <SubmitButtonIcon className="icon" />
+                    <span className="text">{submitButtonText}</span>
+                  </SubmitButton>
+
+                  <p tw="mt-8 text-sm text-gray-600 text-center">
+                    Already have an account?{" "}
+                    <a
+                      href={signInUrl}
+                      tw="border-b border-gray-500 border-dotted"
+                    >
+                      Sign In
+                    </a>
+                  </p>
+                </Form>
+              </FormContainer>
+            </MainContent>
+          </MainContainer>
+          <IllustrationContainer>
+            <IllustrationImage imageSrc={illustrationImageSrc} />
+          </IllustrationContainer>
+        </Content>
+      </Container>
+    </AnimationRevealPage>
+  );
+}
+export default Signup;
