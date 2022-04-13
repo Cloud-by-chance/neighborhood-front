@@ -2,7 +2,7 @@ pipeline {
   agent any
   environment {
     dockerHubRegistry = 'bluetic321/cicd-test'
-    dockerHubRegistryCredential = '{docker-hub-credential}'
+    dockerHubRegistryCredential = {docker-hub-credential}
   }
 
   stages {
@@ -23,8 +23,8 @@ pipeline {
     }
     stage('Docker Image Build') {
         steps {
-            sh "sudo docker build . -t ${dockerHubRegistry}:${currentBuild.number}"
-            sh "sudo docker build . -t ${dockerHubRegistry}:latest"
+            sh "docker build . -t ${dockerHubRegistry}:${currentBuild.number}"
+            sh "docker build . -t ${dockerHubRegistry}:latest"
         }
         post {
                 failure {
@@ -37,9 +37,9 @@ pipeline {
     }
     stage('Docker Image Push') {
         steps {
-            withDockerRegistry([ credentialsId: dockerHubRegistryCredential, url: "" ]) {
-                                sh "sudo docker push ${dockerHubRegistry}:${currentBuild.number}"
-                                sh "sudo docker push ${dockerHubRegistry}:latest"
+            withDockerRegistry([ credentialsId: ${dockerHubRegistryCredential}, url: "" ]) {
+                                sh "docker push ${dockerHubRegistry}:${currentBuild.number}"
+                                sh "docker push ${dockerHubRegistry}:latest"
 
                                 sleep 10 /* Wait uploading */ 
                             }
@@ -47,13 +47,13 @@ pipeline {
         post {
                 failure {
                   echo 'Docker Image Push failure !'
-                  sh "sudo docker rmi ${dockerHubRegistry}:${currentBuild.number}"
-                  sh "sudo docker rmi ${dockerHubRegistry}:latest"
+                  sh "docker rmi ${dockerHubRegistry}:${currentBuild.number}"
+                  sh "docker rmi ${dockerHubRegistry}:latest"
                 }
                 success {
                   echo 'Docker image push success !'
-                  sh "sudo docker rmi ${dockerHubRegistry}:${currentBuild.number}"
-                  sh "sudo docker rmi ${dockerHubRegistry}:latest"
+                  sh "docker rmi ${dockerHubRegistry}:${currentBuild.number}"
+                  sh "docker rmi ${dockerHubRegistry}:latest"
                 }
         }
     }  
