@@ -15,6 +15,7 @@ import { axiosInstance } from "components/api";
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
+import axios from "axios";
 
 
 const Container = tw(ContainerBase)`min-h-screen bg-primary-900 text-white font-medium flex justify-center -m-8`;
@@ -64,21 +65,28 @@ const IllustrationImage = styled.div`
 //여기가 새로 살 붙인 부분 onChange와 onSubmit이다. 
 // const [inputs, setInputs] = useState({ username: "", password: "" });
 
-
 function Signup() {
-  const [inputs, setInputs] = useState({ Email: "", Password: "" });
+  const [inputs, setInputs] = useState({ user_id:"",nick_name: " " ,email: "", password: "" });
   const [formDisable, setFormDisable] = useState(true);
   const history= useHistory();
 
-  // useEffect(() => {
-  //   const isEnable = Object.values(inputs).every((s) => s.length > 0); //문자열이 전부다 0보다 커야됨
-  //   // const isEnable = inputs.username.length > 0 && inputs.password.length > 0;
-  //   setFormDisable(!isEnable);
-  // }, [inputs]);
-  const onSubmit=(e) =>{
-    console.log("제출 완료")
-    
-    console.log(setInputs)
+  const onSubmit=(e) =>{ // 내가 버튼 눌러서 Submit이 된 경우 실행될 함수!
+    var headers = {
+      'Content-Type': 'application/json' 
+  }
+    e.preventDefault();
+    console.log(inputs)
+    axiosInstance
+    .post("/v1/signup",JSON.stringify(inputs),{headers})
+    .then((response) =>{
+      console.log("response:", response);
+      history.push("/accounts/login");
+    })
+    .catch((error) => {
+      if (error.response){
+        console.log("Error 발생!");
+      }
+    })
   };
 
   const onChange = (e) => {
@@ -88,7 +96,7 @@ function Signup() {
       ...inputs, //이전 inputs 값을 받아와서 이어써주기 위해 사용한다
       [name]: value, //여기서 []은 리스트 ,array가 아니라 이 식을 평가하라는 뜻이다(in javascript)
     });
-    console.log(inputs)
+
   };
   
   const logoLinkUrl = "/",
@@ -134,23 +142,20 @@ return (
               <DividerTextContainer>
                 <DividerText>Or Sign up with your e-mail</DividerText>
               </DividerTextContainer>
+
+              
               <Form  onSubmit={onSubmit}>
-                <Input type="email" name="Email" placeholder="Email" onChange={onChange}/>
-                <Input type="password" name="Password" placeholder="Password" onChange={onChange} />
+               <Input type="text" name="user_id" placeholder="사용할 ID를 입력하세요" onChange={onChange} />
+               <Input type="text" name="nick_name" placeholder="이름" onChange={onChange} />
+                <Input type="email" name="email" placeholder="E - Mail" onChange={onChange}/>
+                <Input type="password" name="password" placeholder="Password" onChange={onChange} />
+                
+                
                 <SubmitButton type="submit">
                   <SubmitButtonIcon className="icon" />
                   <span className="text">{submitButtonText}</span>
                 </SubmitButton>
-                {/* <p tw="mt-6 text-xs text-gray-600 text-center">
-                  I agree to abide by treact's{" "}
-                  <a href={tosUrl} tw="border-b border-gray-500 border-dotted">
-                    Terms of Service
-                  </a>{" "}
-                  and its{" "}
-                  <a href={privacyPolicyUrl} tw="border-b border-gray-500 border-dotted">
-                    Privacy Policy
-                  </a>
-                </p> */}
+             
 
                 <p tw="mt-8 text-sm text-gray-600 text-center">
                   Already have an account?{" "}
