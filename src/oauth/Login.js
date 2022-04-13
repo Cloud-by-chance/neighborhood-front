@@ -4,35 +4,10 @@ import { Button } from "antd";
 import { KAKAO_AUTH_URL } from "../oauth/OAuth";
 
 const Login = () => {
-  console.log(KAKAO_AUTH_URL);
-
-  const [id, setId] = useState("");
-  const [accessToken, setAccessToken] = useState("");
-  const [refreshToken, setRefreshToken] = useState("");
-  const [provider, setProvider] = useState("kakao");
-
-  const clickHandler = () => {
-    <KaKaoBtn href={KAKAO_AUTH_URL}></KaKaoBtn>;
-  };
-
-  const responseKakao = (res) => {
-    setAccessToken(res.response.access_token);
-    const {
-      profile: { id: id },
-      response: { access_token: accessToken, refresh_token: refreshToken },
-    } = res;
-
-    // 서버에게 token넘겨주기
-  };
-
-  const responseFail = (err) => {
-    console.log(err);
-  };
-
   return (
     <>
       <KaKaoBtn href={KAKAO_AUTH_URL} type="primary">
-        카카오로그인
+        카카오 로그인
       </KaKaoBtn>
     </>
   );
