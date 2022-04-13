@@ -23,8 +23,8 @@ pipeline {
     }
     stage('Docker Image Build') {
         steps {
-            sh "sudo docker build . -t ${dockerHubRegistry}:${currentBuild.number}"
-            sh "sudo docker build . -t ${dockerHubRegistry}:latest"
+            sh "docker build . -t ${dockerHubRegistry}:${currentBuild.number}"
+            sh "docker build . -t ${dockerHubRegistry}:latest"
         }
         post {
                 failure {
@@ -38,8 +38,8 @@ pipeline {
     stage('Docker Image Push') {
         steps {
             withDockerRegistry([ credentialsId: dockerHubRegistryCredential, url: "" ]) {
-                                sh "sudo docker push ${dockerHubRegistry}:${currentBuild.number}"
-                                sh "sudo docker push ${dockerHubRegistry}:latest"
+                                sh "docker push ${dockerHubRegistry}:${currentBuild.number}"
+                                sh "docker push ${dockerHubRegistry}:latest"
 
                                 sleep 10 /* Wait uploading */ 
                             }
