@@ -67,10 +67,11 @@ pipeline {
             sh "sed -i 's/cicd-test:.*\$/cicd-test:${currentBuild.number}/g' deployment.yaml"
             sh "git add deployment.yaml"
             sh "git commit -m '[UPDATE] cicd-test ${currentBuild.number} image versioning'"
-            sshagent(credentials: ['{githubCredential}']) {
+            sh "git push -u origin main"
+            /*sshagent(credentials: ['{githubCredential}']) {
                 sh "git remote set-url origin git@https://github.com/Cloud-by-chance/neighborhood-manifest.git"
                 sh "git push -u origin main"
-             }
+             }*/
         }
         post {
                 failure {
