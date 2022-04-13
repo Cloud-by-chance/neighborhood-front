@@ -37,7 +37,7 @@ pipeline {
     }
     stage('Docker Image Push') {
         steps {
-            withDockerRegistry([ credentialsId: "${dockerHubRegistryCredential}", url: "" ]) {
+            withDockerRegistry([ credentials: "${dockerHubRegistryCredential}", url: "" ]) {
                                 sh "docker push ${dockerHubRegistry}:${currentBuild.number}"
                                 sh "docker push ${dockerHubRegistry}:latest"
 
