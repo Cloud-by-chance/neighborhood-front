@@ -2,7 +2,7 @@ pipeline {
   agent any
   environment {
     dockerHubRegistry = 'bluetic321/cicd-test'
-    dockerHubRegistryCredential = {docker-hub-credential}
+    dockerHubRegistryCredential = 'docker-hub-credential'
   }
 
   stages {
