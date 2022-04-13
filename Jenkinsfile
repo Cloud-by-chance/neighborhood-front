@@ -38,7 +38,7 @@ pipeline {
     }
     stage('Docker Image Push') {
         steps {
-            withDockerRegistry([ credentialsId: '{dockerHubRegistryCredential}', url: "" ]) {
+            withDockerRegistry([ credentialsId: 'docker-hub-credential' , url: "" ]) {
                                 sh "docker push ${dockerHubRegistry}:${currentBuild.number}"
                                 sh "docker push ${dockerHubRegistry}:latest"
 
@@ -60,7 +60,7 @@ pipeline {
     }  
     stage('K8S Manifest Update') {
         steps {
-            git credentialsId: '{githubCredential}',
+            git credentialsId: 'git-hub-credential',
                 url: 'https://github.com/Cloud-by-chance/neighborhood-manifest.git',
                 branch: 'main'
 
