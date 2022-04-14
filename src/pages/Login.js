@@ -13,7 +13,6 @@ import { ReactComponent as LoginIcon } from "feather-icons/dist/icons/log-in.svg
 import { axiosInstance } from "components/api";
 import { message, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
-
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
 
@@ -87,7 +86,7 @@ function Login() {
         "Content-Type": "application/json",
       };
       await axiosInstance
-        .post("/v1/signin", JSON.stringify(inputs), { headers })
+        .post("/v1/login", JSON.stringify(inputs), { headers })
         .then((response) => {
           console.log("response:", response.data.data);
           const token = response.data.data;
@@ -116,6 +115,7 @@ function Login() {
     // });
     fn();
   };
+
   const logoLinkUrl = "/",
     illustrationImageSrc = illustration,
     headingText = "Sign In To 우리동네 정보통",
@@ -149,7 +149,7 @@ function Login() {
               <FormContainer>
                 <SocialButtonsContainer>
                   {socialButtons.map((socialButton, index) => (
-                    <SocialButton key={index} onClick={onSubmit}>
+                    <SocialButton key={index} href={socialButton.url}>
                       <span className="iconContainer">
                         <img
                           src={socialButton.iconImageSrc}
