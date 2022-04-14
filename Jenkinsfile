@@ -3,7 +3,7 @@ pipeline {
   environment {
     dockerHubRegistry = 'bluetic321/cicd-test'
     dockerHubRegistryCredential = 'docker-hub-credential'
-    githubCredential = 'git-hub-credential'
+    githubCredential = 'git-ssh'
   }
 
   stages {
@@ -60,18 +60,16 @@ pipeline {
     }  
     stage('K8S Manifest Update') {
         steps {
-            git credentialsId: 'git-hub-credential',
-                url: 'https://github.com/Cloud-by-chance/neighborhood-manifest.git',
+            git url: 'https://github.com/Cloud-by-chance/neighborhood-manifest.git',
                 branch: 'main'
 
             sh "sed -i 's/cicd-test:.*\$/cicd-test:${currentBuild.number}/g' deployment.yaml"
             sh "git add deployment.yaml"
             sh "git commit -m '[UPDATE] cicd-test ${currentBuild.number} image versioning'"
-            sh "git push -u origin main"
-            /*sshagent(credentials: ['{githubCredential}']) {
+            sshagent(credentials: 'git-ssh') {
                 sh "git remote set-url origin git@https://github.com/Cloud-by-chance/neighborhood-manifest.git"
                 sh "git push -u origin main"
-             }*/
+             }
         }
         post {
                 failure {
