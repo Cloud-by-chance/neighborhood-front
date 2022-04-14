@@ -23,7 +23,7 @@ import Map from "pages/Maps";
 import { Route } from "react-router-dom";
 import Signup from "pages/Signup";
 import Login from "pages/Login";
-//import Login from "oauth/Login";
+import KakaoJWT from "oauth/KakaoJWT";
 import PostNew from "pages/PostNew";
 import AboutUs from "pages/AboutUs";
 import Home from "pages/CommunityHome";
@@ -62,6 +62,8 @@ export default () => {
       <Route exact path="/" component={Hero} />
       <Route exact path="/accounts/signup" component={Signup} />
       <Route exact path="/Login" component={Login} />
+      <Route path="http://localhost:3000/v1/kakao" component={KakaoJWT} />
+      {/* <Route path="/v1/kakaoLogin" component={KakaoJWT} /> */}
       <Route exact path="/maps" component={Test_MAP} />
       <Route exact path="/community" component={Home} />
       <Route exact path="/about" component={AboutUs} />
