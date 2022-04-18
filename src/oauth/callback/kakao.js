@@ -39,8 +39,9 @@ const Auth = () => {
     useEffect(() => {
       GetToken();
     }, []);
-    return null;
+    
   };
+  return null;
 };
 
 export default Auth;
