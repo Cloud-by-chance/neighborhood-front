@@ -60,4 +60,8 @@ const Auth = () => {
   return null;
 };
 
+<<<<<<< HEAD
 export default Auth;
+=======
+export default Auth;
+>>>>>>> cd4daa369f4b02f42b909d4119769182b79c3269
