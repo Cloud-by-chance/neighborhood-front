@@ -7,19 +7,19 @@ import { message, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
 
 const KakaoJWT = () => {
-  const accessToken = window.localStorage.getItem("ACT");
-  async function postData() {
-    try {
-      //응답 성공
-      const response = await axios.post("/v1/kakaoLogin", {
-        //보내고자 하는 데이터
-        accessToken: accessToken,
-      });
-      console.log(response);
-    } catch (error) {
-      //응답 실패
-      console.error(error);
-    }
-  }
+  const history = useHistory();
+  const accessToken = this.props.location.state.access_token;
+  console.log(accessToken);
+  const payload = qs.stringify({
+    accessToken: accessToken,
+  });
+  axios
+    .post("http://localhost:8081/v1/kakaoLogin", payload)
+    .then((response) => {
+      console.log("갓성결");
+      history.push("/");
+    })
+    .catch(console.log("error!"));
 };
+
 export default KakaoJWT;
