@@ -1,7 +1,7 @@
 pipeline {
   agent any
   environment {
-    dockerHubRegistry = 'bluetic321/cicd-test'
+    dockerHubRegistry = 'bluetic321/cicd-web'
     dockerHubRegistryCredential = 'docker-hub-credential'
     githubCredential = 'git-ssh'
   }
