@@ -3,9 +3,9 @@ import axios from "axios";
 import Tr from "../components/Board/Tr";
 import Post from "../components/page/Post";
 import Modal from "../components/Board/Modal";
-import "@material-tailwind/react/tailwind.css";
 import Button from "@material-tailwind/react/Button";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BeakerIcon } from '@heroicons/react/solid'
 
 function Board() {
     const [info, setInfo] = useState([]);
@@ -93,8 +93,11 @@ function Board() {
     return (
         <div className="container max-w-screen-lg mx-auto">
             <div className='text-xl font-bold mt-5 mb-3 text-center'><h1>게 시 판</h1></div>
-            <Button color="lightBlue" buttonType="outline" size="regular" rounded={false} block={false} iconOnly={false} ripple="dark"
+            <Button className="flex justify-center" color="lightBlue" buttonType="outline" size="regular" rounded={false} block={false} iconOnly={false} ripple="dark"
                     onClick={handleSave}>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
                 글 쓰기
             </Button>
             <table className='min-w-full table-auto text-gray-800'>
