@@ -1,3 +1,3 @@
 FROM nginx:latest
 
-CMD ["echo", "cicd test!;"]
+#CMD ["echo", "cicd test!;"]
