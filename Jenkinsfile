@@ -63,9 +63,9 @@ pipeline {
             git url: 'https://github.com/Cloud-by-chance/neighborhood-manifest.git',
                 branch: 'main'
 
-            sh "sed -i 's/cicd-test:.*\$/cicd-test:${currentBuild.number}/g' deployment.yaml"
+            sh "sed -i 's/cicd-web:.*\$/cicd-web:${currentBuild.number}/g' deployment.yaml"
             sh "git add deployment.yaml"
-            sh "git commit -m '[UPDATE] cicd-test ${currentBuild.number} image versioning'"
+            sh "git commit -m '[UPDATE] cicd-web ${currentBuild.number} image versioning'"
             sshagent(credentials: ['git-ssh']) {
                 sh "git remote set-url origin git@github.com:Cloud-by-chance/neighborhood-manifest.git"
                 sh "git push -u origin main"
