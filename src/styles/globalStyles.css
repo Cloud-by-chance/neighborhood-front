@@ -15,3 +15,7 @@
     transform: scale(0);
     /* transform: translateY(-150%); */
 }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

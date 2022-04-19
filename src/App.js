@@ -1,4 +1,5 @@
-import "tailwindcss/dist/base.css";
+// import "tailwindcss/dist/base.css";
+import "@material-tailwind/react/tailwind.css";
 import "styles/globalStyles.css";
 import React from "react";
 import { css } from "styled-components/macro"; //eslint-disable-line
