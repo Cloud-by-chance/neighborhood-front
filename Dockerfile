@@ -1,3 +1,3 @@
-FROM bluetic321/my-hello-world:latest
+FROM bluetic321/cicd-web:latest
 
 CMD ["echo", "cicd test!;"]
