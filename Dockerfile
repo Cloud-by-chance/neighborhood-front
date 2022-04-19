@@ -1,3 +1,3 @@
-FROM bluetic321/cicd-web:latest
+FROM nginx:latest
 
 CMD ["echo", "cicd test!;"]
