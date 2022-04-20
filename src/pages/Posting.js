@@ -3,6 +3,7 @@ import React, {useEffect, useState, useRef} from 'react';
 import {Editor, EditorProps} from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import Button from "@material-tailwind/react/Button";
+import {useHistory} from 'react-router-dom';
 
 // TOAST UI Editor Plugin
 import '@toast-ui/chart/dist/toastui-chart.css';
@@ -13,16 +14,19 @@ import 'tui-color-picker/dist/tui-color-picker.css';
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import tableMergedCell from '@toast-ui/editor-plugin-table-merged-cell';
 import uml from '@toast-ui/editor-plugin-uml';
+import axios from "axios";
 
 // const Post = ({onSaveData}) => {
 function Post() {
+    const history = useHistory();
     const editorRef = useRef();
 
     const [editorCon, setEditorCon] = useState("");
     const [form, setForm] = useState({
         user_id: '',
         post_name: '',
-        content: ''
+        content: '',
+        board_id: 5
     });
     // 데이터를 보낼 Form 처리
     const handleChange = (e) => {
@@ -59,6 +63,19 @@ function Post() {
         e.preventDefault();
 
         console.log(form);
+        axios.post("http://localhost:8081/api/v1/post", form)
+             .then(() => {
+                setForm({
+                    ...form,
+                    user_id: '',
+                    post_name: '',
+                    content: '',
+                    board_id: 5
+                });
+
+                history.push('/board')
+            })
+             .catch((err) => console.log(err));
     }
 
     return (
@@ -84,10 +101,14 @@ function Post() {
                             onChange={contentChange}
                             />
                 </div>
-                <div className='text-center'>
+                <div className='text-center flex justify-end'>
                     <Button color="lightBlue" buttonType="outline" size="regular" rounded={false} block={false} iconOnly={false} ripple="dark"
                             type='submit'>
                         저장
+                    </Button>
+                    <Button color="gray" buttonType="outline" size="regular" rounded={false} block={false} iconOnly={false} ripple="dark"
+                            onClick={() => history.goBack()}>
+                        취소
                     </Button>
                 </div>
             </form>
