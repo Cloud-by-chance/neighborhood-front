@@ -1,3 +1,3 @@
-FROM bluetic321/my-hello-world:latest
+FROM nginx:latest
 
-CMD ["echo", "cicd test!;"]
+#CMD ["echo", "cicd test!;"]

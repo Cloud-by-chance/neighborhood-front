@@ -92,6 +92,7 @@ export default ({
     <NavLinks key={1}>
       <NavLink href="/about">About</NavLink>
       <NavLink href="/community">Community</NavLink>
+      <NavLink href="/board">Board</NavLink>
       {/* <NavLink href="/#">Pricing</NavLink> */}
       <NavLink href="/login">Login</NavLink>
     </NavLinks>,

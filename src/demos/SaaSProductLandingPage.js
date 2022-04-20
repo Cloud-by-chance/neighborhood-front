@@ -3,6 +3,7 @@ import tw from "twin.macro";
 import { css } from "styled-components/macro"; //eslint-disable-line
 import AnimationRevealPage from "helpers/AnimationRevealPage.js";
 import Hero from "components/hero/TwoColumnWithInput.js";
+import "@material-tailwind/react/tailwind.css";
 // import Features from "components/features/ThreeColWithSideImage.js";
 // import MainFeature from "components/features/TwoColWithButton.js";
 // import MainFeature2 from "components/features/TwoColWithTwoHorizontalFeaturesAndButton.js";
@@ -27,6 +28,8 @@ import Auth from "oauth/callback/kakao";
 import PostNew from "pages/PostNew";
 import AboutUs from "pages/AboutUs";
 import Home from "pages/CommunityHome";
+import Board from "../pages/Board"
+import Post from "../pages/Posting"
 import PortfolioTwoCardsWithImage from "components/cards/PortfolioTwoCardsWithImage";
 // import SearchPlace from "pages/SearchPlace";
 
@@ -67,6 +70,8 @@ export default () => {
       <Route exact path="/maps" component={Test_MAP} />
       <Route exact path="/community" component={Home} />
       <Route exact path="/about" component={AboutUs} />
+      <Route exact path="/board" component={Board} />
+      <Route exact path="/post" component={Post} />
       <Route exact path="/community/posts/new" component={PostNew} />
     </AnimationRevealPage>
   );
