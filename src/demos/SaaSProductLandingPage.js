@@ -63,8 +63,8 @@ export default () => {
   return (
     <AnimationRevealPage>
       <Route exact path="/" component={Hero} />
-      <Route exact path="/accounts/signup" component={Signup} />
-      <Route exact path="/Login" component={Login} />
+      <Route exact path="/signup" component={Signup} />
+      <Route exact path="/login" component={Login} />
       <Route exact path="/v1/kakao" component={Auth} />
       {/* <Route exact path="/v1/kakaoLogin" component={KakaoJWT} /> */}
       <Route exact path="/maps" component={Test_MAP} />
