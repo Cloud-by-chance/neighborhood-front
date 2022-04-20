@@ -114,7 +114,6 @@ function Board() {
                 <Tr info={info} handleRemove={handleRemove} handleEdit={handleEdit} />
             </table>
                
-            {/* {modalOn && <Modal selectedData={selected} handleCancel={handleCancel} handleEditSubmit={handleEditSubmit} />} */}
         </div>
     );
 };
