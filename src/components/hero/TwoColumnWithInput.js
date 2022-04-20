@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 //eslint-disable-next-line
@@ -52,34 +52,30 @@ export default ({ roundedHeaderButton }) => {
   return (
     <>
       <Header roundedHeaderButton={roundedHeaderButton} />
-      
-      <Container >
-        
+      <Container>
         <TwoColumn>
           <LeftColumn>
-            
             <Heading>
-              Welcome to Beautiful Community  <span tw="text-primary-500">for you.</span>
+              Welcome to Beautiful Community{" "}
+              <span tw="text-primary-500">for you.</span>
             </Heading>
             <Paragraph>
-              저희 '우리동네 정보'는 Cloud Service 기반으로 동네들의 정보를 가져와 필요한 정보를 제공하며 
-              동네 커뮤니티를 통해 이웃 사촌간의 유대를 키워나가는 것을 목표로 하고 있습니다.
+              저희 '우리동네 정보'는 Cloud Service 기반으로 동네들의 정보를
+              가져와 필요한 정보를 제공하며 동네 커뮤니티를 통해 이웃 사촌간의
+              유대를 키워나가는 것을 목표로 하고 있습니다.
             </Paragraph>
             <Actions>
               <input type="text" placeholder="Your E-mail Address" />
-              
+
               <button> Get Started </button>
-             
             </Actions>
-           
           </LeftColumn>
-          <RightColumn >
+          <RightColumn>
             <IllustrationContainer>
               <KaKao_Maps />
             </IllustrationContainer>
           </RightColumn>
         </TwoColumn>
-        
 
         <DecoratorBlob1 />
       </Container>

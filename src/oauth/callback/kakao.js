@@ -7,6 +7,7 @@ import KAKAO_KEY from "../../oauth/KAKAO_KEY";
 import { axiosInstance } from "components/api";
 import { message, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
+import { setCookie } from "../../utils/cookies";
 
 const Auth = () => {
   const REST_API_KEY = KAKAO_KEY;
@@ -25,10 +26,12 @@ const Auth = () => {
   axios
     .post("https://kauth.kakao.com/oauth/token", payload)
     .then((respone) => {
-      //localStorage.setItem("ACT", respone.data.access_token);
+      localStorage.setItem("ReTok", respone.data.refresh_token);
+
       const token = {
         accessToken: respone.data.access_token,
         refreshToken: respone.data.refresh_token,
+        jwt: localStorage.getItem("JWT"),
       };
 
       var headers = {
@@ -37,12 +40,23 @@ const Auth = () => {
       axiosInstance
         .post("/v1/kakaoLogin", JSON.stringify(token), { headers })
         .then((res) => {
-          const token = res.data.data;
+          const token = res.data.list[0];
+          const userName = res.data.list[1];
+          let date = new Date(); //쿠키를 생성한 그 날의 날짜, 시간 생성
+          date.setDate(date.getDate() + 10);
+
+          setCookie("UserName", encodeURIComponent(userName), {
+            path: "/",
+            expires: date,
+          });
+
           localStorage.setItem("JWT", token);
+
           notification.open({
             message: "로그인 성공",
             icon: <SmileOutlined style={{ color: "#108ee9" }} />,
           });
+
           history.replace("/");
         })
         .catch((error) => {

@@ -134,7 +134,7 @@ function Login() {
     submitButtonText = "Sign In",
     SubmitButtonIcon = LoginIcon,
     forgotPasswordUrl = "#",
-    signupUrl = "/accounts/signup";
+    signupUrl = "/signup";
 
   return (
     <AnimationRevealPage>

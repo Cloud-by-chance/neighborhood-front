@@ -23,7 +23,6 @@ import Map from "pages/Maps";
 import { Route } from "react-router-dom";
 import Signup from "pages/Signup";
 import Login from "pages/Login";
-import KakaoJWT from "oauth/KakaoJWT";
 import Auth from "oauth/callback/kakao";
 import PostNew from "pages/PostNew";
 import AboutUs from "pages/AboutUs";

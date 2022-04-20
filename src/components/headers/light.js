@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import tw from "twin.macro";
 import styled from "styled-components";
@@ -6,9 +6,13 @@ import { css } from "styled-components/macro"; //eslint-disable-line
 import AboutUs from "pages/AboutUs.js";
 import useAnimatedNavToggler from "../../helpers/useAnimatedNavToggler.js";
 
+import LoginForm from "../../pages/Profile";
 import logo from "../../images/logo.svg";
 import { ReactComponent as MenuIcon } from "feather-icons/dist/icons/menu.svg";
 import { ReactComponent as CloseIcon } from "feather-icons/dist/icons/x.svg";
+import Login from "pages/Login.js";
+import { Button } from "antd";
+import { getCookie } from "../../utils/cookies";
 
 const Header = tw.header`
   flex justify-between items-center
@@ -63,37 +67,47 @@ export default ({
   className,
   collapseBreakpointClass = "lg",
 }) => {
-  /*
-   * This header component accepts an optionals "links" prop that specifies the links to render in the navbar.
-   * This links props should be an array of "NavLinks" components which is exported from this file.
-   * Each "NavLinks" component can contain any amount of "NavLink" component, also exported from this file.
-   * This allows this Header to be multi column.
-   * So If you pass only a single item in the array with only one NavLinks component as root, you will get 2 column header.
-   * Left part will be LogoLink, and the right part will be the the NavLinks component you
-   * supplied.
-   * Similarly if you pass 2 items in the links array, then you will get 3 columns, the left will be "LogoLink", the center will be the first "NavLinks" component in the array and the right will be the second "NavLinks" component in the links array.
-   * You can also choose to directly modify the links here by not passing any links from the parent component and
-   * changing the defaultLinks variable below below.
-   * If you manipulate links here, all the styling on the links is already done for you. If you pass links yourself though, you are responsible for styling the links or use the helper styled components that are defined here (NavLink)
-   */
+  const [isLogin, setIsLogin] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem("JWT") === null) {
+      // 저장된 값이 없다면
+      console.log("isLogin ?? :: ", isLogin);
+    } else {
+      //  저장된 값이 있다면
+      // 로그인 상태 변경
+      setIsLogin(true);
+      console.log("isLogin ?? :: ", isLogin);
+    }
+  });
+  const onLogout = () => {
+    // sessionStorage 에 user_id 로 저장되어있는 아이템을 삭제한다.
+    localStorage.removeItem("JWT");
+    localStorage.removeItem("ReTok");
+    // App 으로 이동(새로고침)
+    document.location.href = "/";
+  };
+
   const defaultLinks = [
     <NavLinks key={1}>
       <NavLink href="/about">About</NavLink>
       <NavLink href="/community">Community</NavLink>
       {/* <NavLink href="/#">Pricing</NavLink> */}
-      <NavLink href="/login" tw="lg:ml-12!">
-        Login
-      </NavLink>
-      <PrimaryLink
-        css={roundedHeaderButton && tw`rounded-full`}
-        href="/accounts/signup"
-      >
-        Sign Up
-      </PrimaryLink>
+      <NavLink href="/login">Login</NavLink>
+    </NavLinks>,
+  ];
+  const userLinks = [
+    <NavLinks key={1}>
+      <NavLink>{decodeURIComponent(getCookie("UserName"))}</NavLink>
+      <NavLink href="/about">About</NavLink>
+      <NavLink href="/community">Community</NavLink>
+      {/* <NavLink href="/#">Pricing</NavLink> */}
+      <Button onClick={onLogout}>Logout</Button>
     </NavLinks>,
   ];
 
   const { showNavLinks, animation, toggleNavbar } = useAnimatedNavToggler();
+
   const collapseBreakpointCss =
     collapseBreakPointCssMap[collapseBreakpointClass];
 
@@ -104,16 +118,14 @@ export default ({
     </LogoLink>
   );
 
-  logoLink = logoLink || defaultLogoLink;
-  links = links || defaultLinks;
+  https: logoLink = logoLink || defaultLogoLink;
 
   return (
     <Header className={className || "header-light"}>
       <DesktopNavLinks css={collapseBreakpointCss.desktopNavLinks}>
         {logoLink}
-        {links}
+        {isLogin ? userLinks : defaultLinks}
       </DesktopNavLinks>
-
       <MobileNavLinksContainer
         css={collapseBreakpointCss.mobileNavLinksContainer}
       >
@@ -123,7 +135,7 @@ export default ({
           animate={animation}
           css={collapseBreakpointCss.mobileNavLinks}
         >
-          {links}
+          {isLogin ? userLinks : defaultLinks}
         </MobileNavLinks>
         <NavToggle
           onClick={toggleNavbar}
