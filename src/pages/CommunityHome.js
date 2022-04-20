@@ -1,6 +1,7 @@
 import React from "react";
 
 import AppLayout from "components/page/AppLayout";
+import Header from "components/headers/light";
 import { Route } from "react-router-dom";
 import { Button } from "antd";
 import { useHistory } from "react-router-dom";
@@ -24,19 +25,13 @@ function Home() {
         {" "}
         새 포스팅 쓰기
       </Button>
-
-      
     </>
   );
   return (
     <AppLayout sidebar={sidebar}>
       <PostList />
-     
-
       {/* <Route exact path="/community" component={Home} /> */}
-      
     </AppLayout>
-    
   );
 }
 export default Home;

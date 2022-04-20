@@ -6,11 +6,9 @@ import { css } from "styled-components/macro"; //eslint-disable-line
 import AboutUs from "pages/AboutUs.js";
 import useAnimatedNavToggler from "../../helpers/useAnimatedNavToggler.js";
 
-import LoginForm from "../../pages/Profile";
 import logo from "../../images/logo.svg";
 import { ReactComponent as MenuIcon } from "feather-icons/dist/icons/menu.svg";
 import { ReactComponent as CloseIcon } from "feather-icons/dist/icons/x.svg";
-import Login from "pages/Login.js";
 import { Button } from "antd";
 import { getCookie } from "../../utils/cookies";
 
@@ -70,21 +68,13 @@ export default ({
   const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem("JWT") === null) {
-      // 저장된 값이 없다면
-      console.log("isLogin ?? :: ", isLogin);
-    } else {
-      //  저장된 값이 있다면
-      // 로그인 상태 변경
+    if (localStorage.getItem("JWT") !== null) {
       setIsLogin(true);
-      console.log("isLogin ?? :: ", isLogin);
     }
   });
   const onLogout = () => {
-    // sessionStorage 에 user_id 로 저장되어있는 아이템을 삭제한다.
     localStorage.removeItem("JWT");
     localStorage.removeItem("ReTok");
-    // App 으로 이동(새로고침)
     document.location.href = "/";
   };
 
@@ -93,7 +83,6 @@ export default ({
       <NavLink href="/about">About</NavLink>
       <NavLink href="/community">Community</NavLink>
       <NavLink href="/board">Board</NavLink>
-      {/* <NavLink href="/#">Pricing</NavLink> */}
       <NavLink href="/login">Login</NavLink>
     </NavLinks>,
   ];
@@ -102,7 +91,7 @@ export default ({
       <NavLink>{decodeURIComponent(getCookie("UserName"))}</NavLink>
       <NavLink href="/about">About</NavLink>
       <NavLink href="/community">Community</NavLink>
-      {/* <NavLink href="/#">Pricing</NavLink> */}
+      <NavLink href="/board">Board</NavLink>
       <Button onClick={onLogout}>Logout</Button>
     </NavLinks>,
   ];

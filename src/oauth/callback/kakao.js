@@ -40,8 +40,10 @@ const Auth = () => {
       axiosInstance
         .post("/v1/kakaoLogin", JSON.stringify(token), { headers })
         .then((res) => {
+          console.log(res.data);
           const token = res.data.list[0];
           const userName = res.data.list[1];
+
           let date = new Date(); //쿠키를 생성한 그 날의 날짜, 시간 생성
           date.setDate(date.getDate() + 10);
 
@@ -59,8 +61,8 @@ const Auth = () => {
 
           history.replace("/");
         })
-        .catch((error) => {
-          console.log(error);
+        .catch((e) => {
+          alert(e);
         });
     })
     .catch((error) => {
