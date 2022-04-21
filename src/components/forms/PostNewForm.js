@@ -44,7 +44,22 @@ export default function PostNewForm() {
     fileList.forEach((file) => {
       formData.append("photo", file.originFileObj);
     });
-    history.push("/community"); //comunity로 다시 보낸다.
+    let config = {
+      headers :{ "X-AUTH-TOKEN": localStorage.getItem("Access_token")}
+      , //헤더를 보내는 방식 기억할 것.
+    }; 
+    console.log(config)
+    axiosInstance.get("/v1/user",config) //get 요청을 보냄 
+    .then((response)=>{ console.log(response.data)} )
+    .catch((error) => 
+        { 
+          var path = "/v1/refreshtoken?token="+localStorage.getItem("Refresh_token");
+          console.log(path)
+          axiosInstance.post(path)
+          .then((response) => {console.log("토큰 재발급 "+response.data.data)
+                                localStorage.setItem("Access_token",response.data.data)})
+          .catch((error) =>{ console.log("재발급 실패")})
+      })
     // const headers = {
     //   Authorization: ` JWT ${JSON.parse(localStorage.getItem("jwtToken"))}`,
     // }; //인증 헤더에 JWT 올리기
