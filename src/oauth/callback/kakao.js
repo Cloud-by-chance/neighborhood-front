@@ -7,7 +7,7 @@ import KAKAO_KEY from "../../oauth/KAKAO_KEY";
 import { axiosInstance } from "components/api";
 import { message, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
-import { setCookie } from "../../utils/cookies";
+import { getCookie, setCookie } from "../../utils/cookies";
 
 const Auth = () => {
   const REST_API_KEY = KAKAO_KEY;
@@ -43,11 +43,17 @@ const Auth = () => {
           console.log(res.data);
           const token = res.data.list[0];
           const userName = res.data.list[1];
+          const ID = res.data.list[2];
 
           let date = new Date(); //쿠키를 생성한 그 날의 날짜, 시간 생성
           date.setDate(date.getDate() + 10);
 
           setCookie("UserName", encodeURIComponent(userName), {
+            path: "/",
+            expires: date,
+          });
+
+          setCookie("ID", encodeURIComponent(ID), {
             path: "/",
             expires: date,
           });
