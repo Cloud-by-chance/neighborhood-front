@@ -88,7 +88,8 @@ function Signup() {
       .post("/v1/signup", JSON.stringify(inputs), { headers })
       .then((response) => {
         console.log("response:", response);
-        history.push("/accounts/login");
+        history.push("/login");
+        window.location.reload();
       })
       .catch((error) => {
         if (error.response) {

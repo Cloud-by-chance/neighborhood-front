@@ -4,8 +4,8 @@ export default function LoginRequiredRouter({
   component: Component,
   ...kwargs
 }) {
-  let isAuthenticate = window.localStorage.getItem("jwtToken") ? true : false;
-  console.log(isAuthenticate);
+  let isAuthenticate = window.localStorage.getItem("Access_token") ? true : false;
+  // console.log(isAuthenticate);
 
   return (
     //리턴 값을 토큰 값이 있냐 없냐로 구분한다.
@@ -18,7 +18,7 @@ export default function LoginRequiredRouter({
           return (
             <Redirect
               to={{
-                pathname: "/accounts/login",
+                pathname: "/login",
                 state: { from: props.location },
               }}
             />

@@ -86,16 +86,18 @@ function Login() {
         "Content-Type": "application/json",
       };
       await axiosInstance
-        .post("/v1/login", JSON.stringify(inputs), { headers })
-        .then((response) => {
-          console.log("response:", response.data.data);
-          const token = response.data.data;
-          localStorage.setItem("JWT", token);
-          // history.push("/accounts/login");
-          notification.open({
-            message: "로그인 성공",
-            icon: <SmileOutlined style={{ color: "#108ee9" }} />,
-          });
+      .post("/v1/signin", JSON.stringify(inputs), { headers })
+      .then((response) => {
+        console.log("response:", response.data.data);
+        localStorage.setItem("Response", response);
+        const token = response.data.data.split(","); // access 토큰이랑 refresh 토큰이 주어진다. ,로 나눔
+        //2 작업은 access token과 refresh 토큰의 정확한 값을 위해 사용
+        token[0]=token[0].replace('[',''); 
+        token[1]=token[1].replace(']','');
+
+        // localStorage.setItem("JWT", token);
+        localStorage.setItem("Access_token", token[1]);
+        localStorage.setItem("Refresh_token", token[0]);
           history.push("/");
         })
         .catch((error) => {
