@@ -41,24 +41,34 @@ const Auth = () => {
         .post("/v1/kakaoLogin", JSON.stringify(token), { headers })
         .then((res) => {
           console.log(res.data);
-          const token = res.data.list[0];
-          const userName = res.data.list[1];
-          const ID = res.data.list[2];
+
+          var user = {
+            token: res.data.list[0],
+            userName: res.data.list[1],
+            ID: res.data.list[2],
+            email: res.data.list[3],
+            image: res.data.list[4],
+          };
 
           let date = new Date(); //쿠키를 생성한 그 날의 날짜, 시간 생성
           date.setDate(date.getDate() + 10);
 
-          setCookie("UserName", encodeURIComponent(userName), {
+          setCookie("userName", encodeURIComponent(user.userName), {
             path: "/",
             expires: date,
           });
 
-          setCookie("ID", encodeURIComponent(ID), {
+          setCookie("ID", encodeURIComponent(user.ID), {
             path: "/",
             expires: date,
           });
 
-          localStorage.setItem("JWT", token);
+          setCookie("image", encodeURIComponent(user.image), {
+            path: "/",
+            expires: date,
+          });
+
+          localStorage.setItem("JWT", user.token);
 
           notification.open({
             message: "로그인 성공",
