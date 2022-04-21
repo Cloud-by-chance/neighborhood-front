@@ -50,55 +50,30 @@ function Post() {
     // 최초 한 번만 실행(Constructor 역할)
     useEffect(() => {
         const editorInstance = editorRef.current.getInstance();
-
+        
         async function initializingEditor() {
             if(isEdit) {
-                await axios.get("http://localhost:8081/api/v1/post/" + selectedData.post_id)
-                     .then((res) => {
-                        console.log(res.data)
-                        setForm({
-                            ...form,
-                            user_id: selectedData.user_id,
-                            post_name: selectedData.post_name,
-                            content: res.data.content,
-                        })
-                    })
-                     .catch((err) => {console.log(err)});
-                
-                console.log(form);
-                editorInstance.setHTML(form.content);
+                const result = await axios
+                    .get("http://localhost:8081/api/v1/post/" + selectedData.post_id)
+
+                setForm({
+                    ...form,
+                    user_id: result.data.user_id,
+                    post_name: result.data.post_name,
+                    content: result.data.content,
+                })
+
+                editorInstance.setHTML(result.data.content);
             }
         }
+
         initializingEditor();
 
-        // if(isEdit) {
-        //     axios.get("http://localhost:8081/api/v1/post/" + selectedData.post_id)
-        //         .then((res) => {
-        //         console.log(res.data)
-        //         setForm({
-        //             ...form,
-        //             user_id: selectedData.user_id,
-        //             post_name: selectedData.post_name,
-        //             content: res.data.content,
-        //         })
-                
-        //     })
-        //         .catch((err) => {console.log(err)});            
-        // }
-
-        // editorInstance.setHTML("Hello world!");
         const getContent_html = editorInstance.getHTML();
-        
-        // console.log(isEdit);
-
         
         setEditorCon(getContent_html);
     }, [])
-    // // form이 변경될 때 마다 실행
-    // useEffect(() => {
-    //     console.log("It changed!");
-    //     console.log(form);
-    // }, [form])
+
     // editorCon값이 변경될 때마다 실행
     useEffect(() => {
         setForm({
@@ -137,7 +112,7 @@ function Post() {
                             name='post_name' value={form.post_name} onChange={handleChange}/>
                 </div>
                 <div className="mt-5 w-5/6 flex justify-center">
-                    <Editor initialValue={isEdit ? form.content : "Hello World!"}
+                    <Editor initialValue={isEdit ? form.content : "게시글을 작성하세요!"}
                             previewStyle="vertical"
                             height="600px"
                             initialEditType="markdown"

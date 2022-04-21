@@ -23,7 +23,7 @@ function Td ({item, handleRemove, handleEdit}) {
 
     const onEdit = () => {
         console.log("edit post");
-        console.log(selectedData);
+        // console.log(selectedData);
         handleEdit(item);
     }
 
