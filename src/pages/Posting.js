@@ -3,7 +3,7 @@ import React, {useEffect, useState, useRef} from 'react';
 import {Editor, EditorProps} from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import Button from "@material-tailwind/react/Button";
-import {useHistory} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 
 // TOAST UI Editor Plugin
 import '@toast-ui/chart/dist/toastui-chart.css';
@@ -20,6 +20,10 @@ import axios from "axios";
 function Post() {
     const history = useHistory();
     const editorRef = useRef();
+    const location = useLocation();
+    // const [isEdit, setIsEdit] = useState(location.state.isEdit);
+    const isEdit = location.state.isEdit;
+    const [selectedData, setSelectedData] = useState(location.state.selectedData);
 
     const [editorCon, setEditorCon] = useState("");
     const [form, setForm] = useState({
@@ -46,11 +50,55 @@ function Post() {
     // 최초 한 번만 실행(Constructor 역할)
     useEffect(() => {
         const editorInstance = editorRef.current.getInstance();
+
+        async function initializingEditor() {
+            if(isEdit) {
+                await axios.get("http://localhost:8081/api/v1/post/" + selectedData.post_id)
+                     .then((res) => {
+                        console.log(res.data)
+                        setForm({
+                            ...form,
+                            user_id: selectedData.user_id,
+                            post_name: selectedData.post_name,
+                            content: res.data.content,
+                        })
+                    })
+                     .catch((err) => {console.log(err)});
+                
+                console.log(form);
+                editorInstance.setHTML(form.content);
+            }
+        }
+        initializingEditor();
+
+        // if(isEdit) {
+        //     axios.get("http://localhost:8081/api/v1/post/" + selectedData.post_id)
+        //         .then((res) => {
+        //         console.log(res.data)
+        //         setForm({
+        //             ...form,
+        //             user_id: selectedData.user_id,
+        //             post_name: selectedData.post_name,
+        //             content: res.data.content,
+        //         })
+                
+        //     })
+        //         .catch((err) => {console.log(err)});            
+        // }
+
+        // editorInstance.setHTML("Hello world!");
         const getContent_html = editorInstance.getHTML();
+        
+        // console.log(isEdit);
+
         
         setEditorCon(getContent_html);
     }, [])
-
+    // // form이 변경될 때 마다 실행
+    // useEffect(() => {
+    //     console.log("It changed!");
+    //     console.log(form);
+    // }, [form])
     // editorCon값이 변경될 때마다 실행
     useEffect(() => {
         setForm({
@@ -89,7 +137,7 @@ function Post() {
                             name='post_name' value={form.post_name} onChange={handleChange}/>
                 </div>
                 <div className="mt-5 w-5/6 flex justify-center">
-                    <Editor initialValue="hello react editor world!"
+                    <Editor initialValue={isEdit ? form.content : "Hello World!"}
                             previewStyle="vertical"
                             height="600px"
                             initialEditType="markdown"

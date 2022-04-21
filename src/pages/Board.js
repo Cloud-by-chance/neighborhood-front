@@ -5,7 +5,7 @@ import Post from "../components/page/Post";
 import Header from "components/headers/light";
 import Modal from "../components/Board/Modal";
 import Button from "@material-tailwind/react/Button";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { BeakerIcon } from "@heroicons/react/solid";
 
 function Board() {
@@ -33,30 +33,9 @@ function Board() {
       });
   }
 
-  const handleSave = () => {
-    window.location.href = "/post";
-    // if(data.id) {
-    //     setInfo(
-    //         info.map(row => data.id === row.id ? {
-    //             post_id: data.post_id,
-    //             post_name: data.post_name,
-    //             user_id: data.user_id,
-    //             content: data.content,
-    //             update_dt: data.update_dt
-    //         } : row)
-    //     )
-    // } else {
-    //     setInfo(info => info.concat({
-    //         post_id: data.post_id,
-    //         post_name: data.post_name,
-    //         user_id: data.user_id,
-    //         content: data.content,
-    //         update_dt: data.update_dt
-    //     }))
-
-    //     nextId.current += 1;
-    // }
-  };
+  // const handleSave = () => {
+  //   window.location.href = "/post";
+  // };
 
   const handleRemove = (id) => {
     console.log(id);
@@ -71,7 +50,6 @@ function Board() {
   };
 
   const handleEdit = (item) => {
-    setModalOn(true);
     const selectedData = {
       post_id: item.post_id,
       post_name: item.post_name,
@@ -80,21 +58,10 @@ function Board() {
       update_dt: item.update_dt,
     };
 
-    console.log(selectedData);
+    
+    // console.log(selectedData);
     setSelected(selectedData);
   };
-
-  const handleCancel = () => {
-    setModalOn(false);
-  };
-
-  const handleEditSubmit = (item) => {
-    console.log(item);
-    handleSave(item);
-    setModalOn(false);
-  };
-
-  // console.log(postList);
 
   return (
     <>
@@ -103,33 +70,18 @@ function Board() {
         <div className="text-xl font-bold mt-5 mb-3 text-center">
           <h1>게 시 판</h1>
         </div>
-        <Button
-          className="flex justify-center"
-          color="lightBlue"
-          buttonType="outline"
-          size="regular"
-          rounded={false}
-          block={false}
-          iconOnly={false}
-          ripple="dark"
-          onClick={handleSave}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
-          글 쓰기
-        </Button>
+        <Link to={{
+          pathname:"/post" ,
+          state: { isEdit: false }
+        }}>
+          <Button className="flex justify-center" color="lightBlue" buttonType="outline" size="regular" rounded={false}
+                  block={false} iconOnly={false} ripple="dark" >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            글 쓰기
+          </Button>
+        </Link>
         <table className="min-w-full table-auto text-gray-800">
           <thead className="justify-between">
             <tr className="bg-gray-800">
