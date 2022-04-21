@@ -68,13 +68,13 @@ export default ({
   const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem("JWT") !== null) {
+    if (localStorage.getItem("Access_token") !== null) {
       setIsLogin(true);
     }
   });
   const onLogout = () => {
-    localStorage.removeItem("JWT");
-    localStorage.removeItem("ReTok");
+    localStorage.removeItem("Refresh_token");
+    localStorage.removeItem("Access_token");
     document.location.href = "/";
   };
 
@@ -99,7 +99,13 @@ export default ({
         <NavLink href="/about">About</NavLink>
         <NavLink href="/community">Community</NavLink>
         <NavLink href="/board">Board</NavLink>
-        <Button onClick={onLogout}>Logout</Button>
+        {/* <Button onClick={onLogout}>Logout</Button> */}
+        <NavLink
+        href="/"
+        onClick={onLogout}
+      >
+        Logout
+      </NavLink>
       </div>
     </NavLinks>,
   ];
