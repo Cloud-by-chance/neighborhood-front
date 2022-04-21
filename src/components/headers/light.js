@@ -55,8 +55,8 @@ export const MobileNavLinks = motion(styled.div`
 `);
 
 export const DesktopNavLinks = tw.nav`
-  hidden lg:flex flex-1 justify-between items-center
-`;
+  hidden lg:flex flex-1  items-center justify-between
+`; //justify-between
 
 export default ({
   roundedHeaderButton = false,
@@ -88,11 +88,19 @@ export default ({
   ];
   const userLinks = [
     <NavLinks key={1}>
-      <NavLink>{decodeURIComponent(getCookie("UserName"))}</NavLink>
-      <NavLink href="/about">About</NavLink>
-      <NavLink href="/community">Community</NavLink>
-      <NavLink href="/board">Board</NavLink>
-      <Button onClick={onLogout}>Logout</Button>
+      <div className="flex items-center">
+        <img
+          className="bg-white shadow-md border-gray-200 rounded-lg"
+          height="30px"
+          width="30px"
+          src={decodeURIComponent(getCookie("image"))}
+        ></img>
+        <NavLink>{decodeURIComponent(getCookie("userName"))}</NavLink>
+        <NavLink href="/about">About</NavLink>
+        <NavLink href="/community">Community</NavLink>
+        <NavLink href="/board">Board</NavLink>
+        <Button onClick={onLogout}>Logout</Button>
+      </div>
     </NavLinks>,
   ];
 

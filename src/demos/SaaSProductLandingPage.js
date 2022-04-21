@@ -28,8 +28,8 @@ import Auth from "oauth/callback/kakao";
 import PostNew from "pages/PostNew";
 import AboutUs from "pages/AboutUs";
 import Home from "pages/CommunityHome";
-import Board from "../pages/Board"
-import Post from "../pages/Posting"
+import Board from "../pages/Board";
+import Post from "../pages/Posting";
 import PortfolioTwoCardsWithImage from "components/cards/PortfolioTwoCardsWithImage";
 // import SearchPlace from "pages/SearchPlace";
 
