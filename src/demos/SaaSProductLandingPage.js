@@ -34,6 +34,7 @@ import PortfolioTwoCardsWithImage from "components/cards/PortfolioTwoCardsWithIm
 // import SearchPlace from "pages/SearchPlace";
 
 import Test_MAP from "components/page/Test_MAP";
+import LoginRequiredRouter from "utils/LoginRequiredRouter";
 export default () => {
   const Subheading = tw.span`uppercase tracking-widest font-bold text-primary-500`;
   const HighlightedText = tw.span`text-primary-500`;
@@ -46,8 +47,6 @@ export default () => {
       lon = position.coords.longitude; // 경도
 
       // setLocPosition(new kakao.maps.LatLng(lat, lon)) // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다;
-
-      console.log("현재 위치는 ", lat, ", ", lon, " 입니다.");
 
       sessionStorage.setItem("lat", JSON.stringify(lat));
       sessionStorage.setItem("lon", JSON.stringify(lon));
@@ -68,7 +67,7 @@ export default () => {
       <Route exact path="/v1/kakao" component={Auth} />
       {/* <Route exact path="/v1/kakaoLogin" component={KakaoJWT} /> */}
       <Route exact path="/maps" component={Test_MAP} />
-      <Route exact path="/community" component={Home} />
+      <LoginRequiredRouter exact path="/community" component={Home} /> 
       <Route exact path="/about" component={AboutUs} />
       <Route exact path="/board" component={Board} />
       <Route exact path="/post" component={Post} />
