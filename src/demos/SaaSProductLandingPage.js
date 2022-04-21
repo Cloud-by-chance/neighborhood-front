@@ -69,7 +69,7 @@ export default () => {
       <Route exact path="/maps" component={Test_MAP} />
       <LoginRequiredRouter exact path="/community" component={Home} /> 
       <Route exact path="/about" component={AboutUs} />
-      <Route exact path="/board" component={Board} />
+      <LoginRequiredRouter exact path="/board" component={Board} />
       <Route exact path="/post" component={Post} />
       <Route exact path="/community/posts/new" component={PostNew} />
     </AnimationRevealPage>
