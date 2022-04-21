@@ -198,7 +198,8 @@ $RECYCLE.BIN/
 
 # KAKAO LOGIN KEY
 src/oauth/KAKAO_KEY.js
-
+public/index.html
+build/index.html
 # and uncomment the following lines
 # .pnp.*
 
