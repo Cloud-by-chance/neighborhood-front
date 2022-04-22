@@ -7,12 +7,9 @@ import Modal from "../components/Board/Modal";
 import Button from "@material-tailwind/react/Button";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { BeakerIcon } from "@heroicons/react/solid";
-<<<<<<< HEAD
 import { getCookie } from "utils/cookies";
 import WriteBtn from "components/Board/WriteBtn";
-=======
 import Pagination from "../components/Board/pagination";
->>>>>>> ee1861048c006d2cb4edfa8452b1448bf89cd5ad
 
 function Board() {
   const [info, setInfo] = useState([]);
@@ -79,8 +76,7 @@ function Board() {
         <div className="text-xl font-bold mt-5 mb-3 text-center">
           <h1>게 시 판</h1>
         </div>
-<<<<<<< HEAD
-        { !cookieId ? <></> : <WriteBtn />}
+          { !cookieId ? <></> : <WriteBtn />}
         <table className="min-w-full table-auto text-gray-800">
           <thead className="justify-between">
             <tr className="bg-gray-800">
@@ -94,7 +90,7 @@ function Board() {
           </thead>
           <Tr info={info} handleRemove={handleRemove} handleEdit={handleEdit}/>
         </table>
-=======
+
         <Link
           to={{
             pathname: "/post",
@@ -174,7 +170,7 @@ function Board() {
             />
           </table>
         </div>
->>>>>>> ee1861048c006d2cb4edfa8452b1448bf89cd5ad
+
       </div>
       <footer>
         <Pagination
