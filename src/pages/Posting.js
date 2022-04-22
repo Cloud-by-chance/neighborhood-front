@@ -14,6 +14,7 @@ import 'tui-color-picker/dist/tui-color-picker.css';
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import tableMergedCell from '@toast-ui/editor-plugin-table-merged-cell';
 import uml from '@toast-ui/editor-plugin-uml';
+
 import axios from "axios";
 import { getCookie } from "utils/cookies";
 
@@ -128,8 +129,9 @@ function Post() {
                             name='post_name' value={form.post_name} onChange={handleChange}/>
                 </div>
                 <div className="mt-5 w-5/6 flex justify-center">
-                    <Editor initialValue={isEdit ? form.content : "게시글을 작성하세요!"}
+                    <Editor initialValue={isEdit ? form.content : ""}
                             previewStyle="vertical"
+                            placeholder="새로운 소식을 전하세요!"
                             height="600px"
                             initialEditType="markdown"
                             useCommandShortcut={true}

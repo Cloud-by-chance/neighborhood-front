@@ -24,7 +24,7 @@ function Td ({item, handleRemove, handleEdit}) {
             return false;
         }
     }
-    
+
     const onEdit = (e) => {
         e.preventDefault();
 
@@ -37,7 +37,13 @@ function Td ({item, handleRemove, handleEdit}) {
         <>
         <tr className='bg-white border-2 border-gray-200'>
             <td className='px-4 py-3'>{item.post_id}</td>
-            <td className='px-4 py-3'>{item.post_name}</td>
+            <td className='px-4 py-3'>
+            <Link to={{pathname:"/post/detail",
+                        state: {selectedData: selectedData}
+                      }}>
+              {item.post_name}
+            </Link>
+            </td>
             <td className='px-4 py-3'>{item.nick_name}</td>
             <td className='px-4 py-3'>{item.update_dt}</td>
             <td className='px-4 py-3'>

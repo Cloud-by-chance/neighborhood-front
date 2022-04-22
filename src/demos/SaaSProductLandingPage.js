@@ -30,6 +30,7 @@ import AboutUs from "pages/AboutUs";
 import Home from "pages/CommunityHome";
 import Board from "../pages/Board";
 import Post from "../pages/Posting";
+import Detail from "../pages/Detail";
 import PortfolioTwoCardsWithImage from "components/cards/PortfolioTwoCardsWithImage";
 // import SearchPlace from "pages/SearchPlace";
 
@@ -72,6 +73,7 @@ export default () => {
       <Route exact path="/board" component={Board} />
       <Route exact path="/post" component={Post} />
       <Route exact path="/community/posts/new" component={PostNew} />
+      <Route exact path="/post/detail" component={Detail} />
     </AnimationRevealPage>
   );
 };
