@@ -57,6 +57,7 @@ cmake-build-*/
 # IntelliJ
 out/
 
+
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 
@@ -198,8 +199,10 @@ $RECYCLE.BIN/
 
 # KAKAO LOGIN KEY
 src/oauth/KAKAO_KEY.js
-public/index.html
-build/index.html
+
+public/index.*
+build/index.*
+index.*
 # and uncomment the following lines
 # .pnp.*
 
