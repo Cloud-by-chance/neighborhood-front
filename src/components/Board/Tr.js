@@ -1,5 +1,5 @@
-import React from 'react';
-import Td from './Td';
+import React from "react";
+import Td from "./Td";
 
 function Tr ({info, handleRemove, handleEdit}) {
     return (
@@ -7,7 +7,7 @@ function Tr ({info, handleRemove, handleEdit}) {
             {
                 info.map(item => {
                     return (
-                        <Td key={item.post_id} item={item} handleRemove={handleRemove} handleEdit={handleEdit} />
+                        <Td key={item.post_id} item={item} handleRemove={handleRemove} handleEdit={handleEdit} info={info}/>
                     )
                 })
             }

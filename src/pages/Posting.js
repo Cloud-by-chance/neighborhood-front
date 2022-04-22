@@ -15,6 +15,7 @@ import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import tableMergedCell from '@toast-ui/editor-plugin-table-merged-cell';
 import uml from '@toast-ui/editor-plugin-uml';
 import axios from "axios";
+import { getCookie } from "utils/cookies";
 
 // const Post = ({onSaveData}) => {
 function Post() {
@@ -22,16 +23,18 @@ function Post() {
     const editorRef = useRef();
     const location = useLocation();
     // const [isEdit, setIsEdit] = useState(location.state.isEdit);
-    const isEdit = location.state.isEdit;
+    const [isEdit, setIsEdit] = useState(location.state.isEdit);
     const [selectedData, setSelectedData] = useState(location.state.selectedData);
+    const [postId, setPostId] = useState(null);
 
     const [editorCon, setEditorCon] = useState("");
     const [form, setForm] = useState({
-        user_id: '',
+        user_id: getCookie("ID"),
         post_name: '',
         content: '',
-        board_id: 5
+        board_id: 5,
     });
+    
     // 데이터를 보낼 Form 처리
     const handleChange = (e) => {
         const {name, value} = e.target; // 우선 e.target 에서 user_id와 value 를 추출
@@ -53,52 +56,30 @@ function Post() {
 
         async function initializingEditor() {
             if(isEdit) {
-                await axios.get("http://localhost:8081/api/v1/post/" + selectedData.post_id)
-                     .then((res) => {
-                        console.log(res.data)
-                        setForm({
-                            ...form,
-                            user_id: selectedData.user_id,
-                            post_name: selectedData.post_name,
-                            content: res.data.content,
-                        })
-                    })
-                     .catch((err) => {console.log(err)});
-                
-                console.log(form);
-                editorInstance.setHTML(form.content);
+                const result = await axios
+                    .get("http://localhost:8081/api/v1/post/" + selectedData.post_id)
+
+                setForm({
+                    ...form,
+                    user_id: result.data.user_id,
+                    post_name: result.data.post_name,
+                    content: result.data.content,
+                })
+
+                setPostId(result.data.post_id);
+
+                editorInstance.setHTML(result.data.content);
             }
         }
+
         initializingEditor();
 
-        // if(isEdit) {
-        //     axios.get("http://localhost:8081/api/v1/post/" + selectedData.post_id)
-        //         .then((res) => {
-        //         console.log(res.data)
-        //         setForm({
-        //             ...form,
-        //             user_id: selectedData.user_id,
-        //             post_name: selectedData.post_name,
-        //             content: res.data.content,
-        //         })
-                
-        //     })
-        //         .catch((err) => {console.log(err)});            
-        // }
-
-        // editorInstance.setHTML("Hello world!");
+        console.log(form);
         const getContent_html = editorInstance.getHTML();
-        
-        // console.log(isEdit);
-
         
         setEditorCon(getContent_html);
     }, [])
-    // // form이 변경될 때 마다 실행
-    // useEffect(() => {
-    //     console.log("It changed!");
-    //     console.log(form);
-    // }, [form])
+
     // editorCon값이 변경될 때마다 실행
     useEffect(() => {
         setForm({
@@ -110,34 +91,44 @@ function Post() {
     function handleSubmit(e) {
         e.preventDefault();
 
-        console.log(form);
-        axios.post("http://localhost:8081/api/v1/post", form)
-             .then(() => {
-                setForm({
-                    ...form,
-                    user_id: '',
-                    post_name: '',
-                    content: '',
-                    board_id: 5
-                });
+        // console.log(form);
+        if(isEdit) {
+            axios.put("http://localhost:8081/api/v1/post/" + postId, form)
+                .then(() => {
+                    history.push('/board')
+                })
+        } else {
+            console.log(form);
 
-                history.push('/board')
-            })
-             .catch((err) => console.log(err));
+            axios.post("http://localhost:8081/api/v1/post", form)
+            .then(() => {
+               setForm({
+                   ...form,
+                   user_id: '',
+                   post_name: '',
+                   content: '',
+                   board_id: 5
+               });
+
+               history.push('/board')
+           })
+            .catch((err) => console.log(err));
+        }
+        
     }
 
     return (
         <>
             <div className='text-xl font-bold mt-5 mb-2 text-center'>게시글 추가하기</div>
             <form className="mt-5 flex flex-col justify-center" onSubmit={handleSubmit}>
-                <div className="flex w-3/5 justify-center space-x-12">
-                    <Input className="w-24 mr-5" type="text" color="lightBlue" size="regular" outline={true} required placeholder="작성자"
-                            name='user_id' value={form.user_id} onChange={handleChange}/>
-                    <Input className="w-24 ml-5" type="text" color="lightBlue" size="regular" outline={true} required placeholder="제목" 
+                <div style={{width: '30%'}} >
+                    {/* <Input className="w-24 mr-5" type="text" color="lightBlue" size="regular" outline={true} required placeholder="작성자"
+                            name='user_id' value={form.user_id} onChange={handleChange}/> */}
+                    <Input className="w-18 ml-5" type="text" color="lightBlue" size="regular" outline={true} required placeholder="제목" 
                             name='post_name' value={form.post_name} onChange={handleChange}/>
                 </div>
                 <div className="mt-5 w-5/6 flex justify-center">
-                    <Editor initialValue={isEdit ? form.content : "Hello World!"}
+                    <Editor initialValue={isEdit ? form.content : "게시글을 작성하세요!"}
                             previewStyle="vertical"
                             height="600px"
                             initialEditType="markdown"

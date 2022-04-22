@@ -21,7 +21,7 @@ import "@material-tailwind/react/tailwind.css";
 // import BlogIndex from "pages/BlogIndex";
 
 import Map from "pages/Maps";
-import { Route } from "react-router-dom";
+import { Route, Router } from "react-router-dom";
 import Signup from "pages/Signup";
 import Login from "pages/Login";
 import Auth from "oauth/callback/kakao";
@@ -69,7 +69,7 @@ export default () => {
       <Route exact path="/maps" component={Test_MAP} />
       <LoginRequiredRouter exact path="/community" component={Home} /> 
       <Route exact path="/about" component={AboutUs} />
-      <LoginRequiredRouter exact path="/board" component={Board} />
+      <Route exact path="/board" component={Board} />
       <Route exact path="/post" component={Post} />
       <Route exact path="/community/posts/new" component={PostNew} />
     </AnimationRevealPage>

@@ -89,6 +89,10 @@ function Signup() {
       .then((response) => {
         console.log("response:", response);
         history.push("/login");
+// <<<<<<< HEAD
+// =======
+        window.location.reload();
+// >>>>>>> d61ebdc56a323c52cfdb69cd0f103baa875424d0
       })
       .catch((error) => {
         if (error.response) {
