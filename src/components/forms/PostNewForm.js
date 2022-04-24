@@ -1,4 +1,4 @@
-import 'antd/dist/antd.css';
+import 'antd/dist/antd.min.css';
 import React, { useState } from "react";
 import { Form, Button, Input, Upload, Modal, notification } from "antd";
 import { PlusOutlined, FrownOutlined } from "@ant-design/icons";

@@ -54,6 +54,7 @@ function Post() {
     // 최초 한 번만 실행(Constructor 역할)
     useEffect(() => {
         const editorInstance = editorRef.current.getInstance();
+        console.log(editorInstance);
 
         async function initializingEditor() {
             if(isEdit) {

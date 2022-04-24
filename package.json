@@ -5,6 +5,7 @@
   "dependencies": {
     "@heroicons/react": "^1.0.6",
     "@material-tailwind/react": "0.3.4",
+    "@mpth/react-no-ssr": "^1.0.1",
     "@owaiswiz/use-in-view": "^1.0.16",
     "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.2.6",
