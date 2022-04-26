@@ -88,10 +88,12 @@ function Board() {
       .catch((error) => {
         console.log(error);
         axiosInstance
-          .post("/auth/refreshtoken",localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
+          .post("/auth/refreshtoken", localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
           .then((response) => {
+            
             const token = response.data.data; // Token이 Access만 올수도, Access&Refresh가 같이 올수도있ㅇ듬
-            if (token.length() > localStorage.getItem("Access_token").length) {
+            console.log(token.charAt(0))
+            if (token.charAt(0) =='[') {
               //Access 토큰보다 길면 Refresh랑 Access가 같이 온거이므로 Split 작업 실행
               const split_token = token.split(","); // access 토큰이랑 refresh 토큰이 주어진다. ,로 나눔
               //2 작업은 access token과 refresh 토큰의 정확한 값을 위해 사용
@@ -102,22 +104,18 @@ function Board() {
             } else {
               localStorage.setItem("Access_token", token);
             }
-            //다시 delete 실행
-            let config = {
-              headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
-            };
-            axios
-              .delete(baseUrl + "/api/v1/post/" + id, config) //마찬 가지로 Header를 담아 보낸다.
-              .then((response) => {
+            //error나서 하지 못한 delete 작업 다시 적용
+              axios
+               .delete(baseUrl + "/api/v1/post/" + id, config) //마찬 가지로 Header를 담아 보낸다.
+                .then((response) => {
                 setInfo((info) => info.filter((item) => item.post_id !== id));
-              })
-              .catch((error) => {
-                notification.open({
-                  message: "인증 실패!",
-                  description: "다시 로그인을 확인해 주세요",
-                  icon: <FrownOutlined style={{ color: "#ff3333" }} />,
+                }).catch((error) => {
+                  notification.open({
+                    message: "인증 실패!",
+                    description: "다시 로그인을 확인해 주세요",
+                    icon: <FrownOutlined style={{ color: "#ff3333" }} />,
+                  });
                 });
-              });
           })
           .catch((error) => {
             notification.open({

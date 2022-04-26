@@ -20,6 +20,7 @@ import { getCookie } from "utils/cookies";
 
 import { message, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
+import { axiosInstance } from "components/api";
 let config = {
   headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
 };
@@ -70,9 +71,35 @@ function Post() {
 
     async function initializingEditor() {
       if (isEdit) {
-        const result = await axios.get(
-          "http://localhost:8081/api/v1/post/" + selectedData.post_id
+        const result = await axiosInstance.get(
+          "/api/v1/post/" + selectedData.post_id
           ,config
+        ).catch(
+          axiosInstance
+          .post("/auth/refreshtoken", localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
+          .then((response) => {
+            
+            const token = response.data.data; // Token이 Access만 올수도, Access&Refresh가 같이 올수도있ㅇ듬
+            console.log(token.charAt(0))
+            if (token.charAt(0) =='[') {
+              //Access 토큰보다 길면 Refresh랑 Access가 같이 온거이므로 Split 작업 실행
+              const split_token = token.split(","); // access 토큰이랑 refresh 토큰이 주어진다. ,로 나눔
+              //2 작업은 access token과 refresh 토큰의 정확한 값을 위해 사용
+              split_token[0] = split_token[0].replace("[", "");
+              split_token[1] = split_token[1].replace("]", "");
+              localStorage.setItem("Access_token", split_token[1]);
+              localStorage.setItem("Refresh_token", split_token[0]);
+            } else {
+              localStorage.setItem("Access_token", token);
+            }
+            // 실패한 작업 재실행
+             axiosInstance.get(
+              "/api/v1/post/" + selectedData.post_id
+              ,config
+            ).then((response)=>{
+              result= response;
+            })
+          })
         );
 
         setForm({
@@ -109,20 +136,21 @@ function Post() {
 
     // console.log(form);
     if (isEdit) {
-      axios
-        .put("http://localhost:8081/api/v1/post/" + postId, form, config) //"주소", "데이터", "헤더"
+      axiosInstance
+        .put("/api/v1/post/" + postId, form, config) //"주소", "데이터", "헤더"
         .then(() => {
           history.push("/board");
         })
         .catch((error) => {
           console.log(error);
-          axios
-            .post("/auth/refreshtoken",localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
+          //재발급 과정을 시작한다.
+            axiosInstance
+            .post("/auth/refreshtoken", localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
             .then((response) => {
+              
               const token = response.data.data; // Token이 Access만 올수도, Access&Refresh가 같이 올수도있ㅇ듬
-              if (
-                token.length() > localStorage.getItem("Access_token").length
-              ) {
+              console.log(token.charAt(0))
+              if (token.charAt(0) =='[') {
                 //Access 토큰보다 길면 Refresh랑 Access가 같이 온거이므로 Split 작업 실행
                 const split_token = token.split(","); // access 토큰이랑 refresh 토큰이 주어진다. ,로 나눔
                 //2 작업은 access token과 refresh 토큰의 정확한 값을 위해 사용
@@ -133,15 +161,15 @@ function Post() {
               } else {
                 localStorage.setItem("Access_token", token);
               }
-              //재발급 받은 토큰으로 다시 실행
+              //재발급 받은 토큰으로 작업 재 실행
               let config = {
                 headers: {
                   "X-AUTH-TOKEN": localStorage.getItem("Access_token"),
-                }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
+                }, 
               };
-              axios
+              axiosInstance
                 .put(
-                  "http://localhost:8081/api/v1/post/" + postId,
+                  "/api/v1/post/" + postId,
                   form,
                   config
                 ) //"주소", "데이터", "헤더"
@@ -159,8 +187,8 @@ function Post() {
         });
     } else {
       console.log(form);
-      axios
-        .post("http://localhost:8081/api/v1/post", form, config)
+      axiosInstance
+        .post("/api/v1/post", form, config)
         .then(() => {
           setForm({
             ...form,
@@ -173,24 +201,24 @@ function Post() {
           history.push("/board");
         })
         .catch((error) => {
-          console.log(error);
-          axios
-            .post("/auth/refreshtoken",localStorage.getItem("Refresh_token"))//에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
-            .then((response) => {
-              const token = response.data.data; // Token이 Access만 올수도, Access&Refresh가 같이 올수도있ㅇ듬
-              if (
-                token.length() > localStorage.getItem("Access_token").length
-              ) {
-                //Access 토큰보다 길면 Refresh랑 Access가 같이 온거이므로 Split 작업 실행
-                const split_token = token.split(","); // access 토큰이랑 refresh 토큰이 주어진다. ,로 나눔
-                //2 작업은 access token과 refresh 토큰의 정확한 값을 위해 사용
-                split_token[0] = split_token[0].replace("[", "");
-                split_token[1] = split_token[1].replace("]", "");
-                localStorage.setItem("Access_token", split_token[1]);
-                localStorage.setItem("Refresh_token", split_token[0]);
-              } else {
-                localStorage.setItem("Access_token", token);
-              }
+         //재발급 과정을 시작한다.
+          axiosInstance
+          .post("/auth/refreshtoken", localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
+          .then((response) => {
+            
+            const token = response.data.data; // Token이 Access만 올수도, Access&Refresh가 같이 올수도있ㅇ듬
+            console.log(token.charAt(0))
+            if (token.charAt(0) =='[') {
+              //Access 토큰보다 길면 Refresh랑 Access가 같이 온거이므로 Split 작업 실행
+              const split_token = token.split(","); // access 토큰이랑 refresh 토큰이 주어진다. ,로 나눔
+              //2 작업은 access token과 refresh 토큰의 정확한 값을 위해 사용
+              split_token[0] = split_token[0].replace("[", "");
+              split_token[1] = split_token[1].replace("]", "");
+              localStorage.setItem("Access_token", split_token[1]);
+              localStorage.setItem("Refresh_token", split_token[0]);
+            } else {
+              localStorage.setItem("Access_token", token);
+            }
               //재발급 받은 토큰으로 다시 실행
               let config = {
                 headers: {
@@ -198,8 +226,8 @@ function Post() {
                 }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
               };
               //post를 재 실행
-              axios
-                .post("http://localhost:8081/api/v1/post", form, config)
+               axiosInstance
+                .post("/api/v1/post", form, config)
                 .then(() => {
                   setForm({
                     ...form,
