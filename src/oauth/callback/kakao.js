@@ -11,7 +11,7 @@ import { getCookie, setCookie } from "../../utils/cookies";
 
 const Auth = () => {
   const REST_API_KEY = KAKAO_KEY;
-  const REDIRECT_URL = "http://localhost:3000/v1/kakao";
+  const REDIRECT_URL = "http://localhost:3000/auth/kakao";
   // calllback으로 받은 인가코드
   const code = new URL(window.location.href).searchParams.get("code");
   const history = useHistory();
@@ -26,22 +26,22 @@ const Auth = () => {
   axios
     .post("https://kauth.kakao.com/oauth/token", payload)
     .then((respone) => {
-      localStorage.setItem("ReTok", respone.data.refresh_token);
-
       const token = {
         accessToken: respone.data.access_token,
         refreshToken: respone.data.refresh_token,
-        jwt: localStorage.getItem("JWT"),
+        jwt: localStorage.getItem("Access_token"),
       };
+
+      //[카카오 토큰] 로그인, 로그아웃 할때 필요
+      localStorage.setItem("k_Actok", token.accessToken);
+      localStorage.setItem("Refresh_token", token.refreshToken);
 
       var headers = {
         "Content-Type": "application/json",
       };
       axiosInstance
-        .post("/v1/kakaoLogin", JSON.stringify(token), { headers })
+        .post("/auth/kakaoLogin", JSON.stringify(token), { headers })
         .then((res) => {
-          console.log(res.data);
-
           var user = {
             token: res.data.list[0],
             userName: res.data.list[1],
@@ -68,7 +68,8 @@ const Auth = () => {
             expires: date,
           });
 
-          localStorage.setItem("JWT", user.token);
+          //jwt 토큰
+          localStorage.setItem("Access_token", user.token);
 
           notification.open({
             message: "로그인 성공",
@@ -79,6 +80,7 @@ const Auth = () => {
         })
         .catch((e) => {
           alert(e);
+          history.replace("/");
         });
     })
     .catch((error) => {
@@ -87,6 +89,7 @@ const Auth = () => {
         description: "아이디/암호를 확인해 주세요",
         icon: <FrownOutlined style={{ color: "#ff3333" }} />,
       });
+      history.replace("/");
     });
 
   return null;

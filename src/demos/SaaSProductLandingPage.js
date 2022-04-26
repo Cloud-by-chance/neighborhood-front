@@ -65,10 +65,10 @@ export default () => {
       <Route exact path="/" component={Hero} />
       <Route exact path="/signup" component={Signup} />
       <Route exact path="/login" component={Login} />
-      <Route exact path="/v1/kakao" component={Auth} />
+      <Route exact path="/auth/kakao" component={Auth} />
       {/* <Route exact path="/v1/kakaoLogin" component={KakaoJWT} /> */}
       <Route exact path="/maps" component={Test_MAP} />
-      <LoginRequiredRouter exact path="/community" component={Home} /> 
+      <LoginRequiredRouter exact path="/community" component={Home} />
       <Route exact path="/about" component={AboutUs} />
       <Route exact path="/board" component={Board} />
       <Route exact path="/post" component={Post} />
