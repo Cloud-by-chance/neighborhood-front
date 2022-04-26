@@ -12,6 +12,7 @@ import WriteBtn from "components/Board/WriteBtn";
 import Pagination from "../components/Board/pagination";
 import { message, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
+import { axiosInstance } from "components/api";
 function Board() {
   const [info, setInfo] = useState([]);
   const [selected, setSelected] = useState("");
@@ -35,20 +36,21 @@ function Board() {
     getPosts();
   }, []);
 
-  async function getPosts() {
-    await axios
-      .get(baseUrl + "/api/v1/posts", config) //항상 헤더를 담아서
+  function getPosts() {
+     axiosInstance
+      .get("/api/v1/posts", config) //항상 헤더를 담아서
       .then((response) => {
+        console.log("정상 처리 했습니다.")
         setInfo(response.data); //제대로 받았으면 data를 Info에 넣어줌
       })
       .catch((error) => {
         console.log(error);
-
-        axios
-          .post(path) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
+        axiosInstance
+          .post("/auth/refreshtoken", localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
           .then((response) => {
+            console.log(response.data.data)
             const token = response.data.data; // Token이 Access만 올수도, Access&Refresh가 같이 올수도있ㅇ듬
-            if (token.length() > localStorage.getItem("Access_token").length) {
+            if ('[' in token) {
               //Access 토큰보다 길면 Refresh랑 Access가 같이 온거이므로 Split 작업 실행
               const split_token = token.split(","); // access 토큰이랑 refresh 토큰이 주어진다. ,로 나눔
               //2 작업은 access token과 refresh 토큰의 정확한 값을 위해 사용
@@ -84,9 +86,8 @@ function Board() {
       })
       .catch((error) => {
         console.log(error);
-
-        axios
-          .post(path) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
+        axiosInstance
+          .post("/auth/refreshtoken",localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
           .then((response) => {
             const token = response.data.data; // Token이 Access만 올수도, Access&Refresh가 같이 올수도있ㅇ듬
             if (token.length() > localStorage.getItem("Access_token").length) {

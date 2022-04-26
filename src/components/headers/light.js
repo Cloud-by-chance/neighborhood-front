@@ -11,6 +11,8 @@ import { ReactComponent as MenuIcon } from "feather-icons/dist/icons/menu.svg";
 import { ReactComponent as CloseIcon } from "feather-icons/dist/icons/x.svg";
 import { Button } from "antd";
 import { getCookie } from "../../utils/cookies";
+import axios from "axios";
+import { axiosInstance } from "components/api.js";
 
 const Header = tw.header`
   flex justify-between items-center
@@ -73,8 +75,10 @@ export default ({
     }
   });
   const onLogout = () => {
+    axiosInstance.post("/auth/logout",localStorage.getItem("Refresh_token"))
     localStorage.removeItem("Refresh_token");
     localStorage.removeItem("Access_token");
+    
     document.location.href = "/";
   };
 
