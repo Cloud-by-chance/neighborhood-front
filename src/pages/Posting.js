@@ -117,7 +117,7 @@ function Post() {
         .catch((error) => {
           console.log(error);
           axios
-            .post(path) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
+            .post("/auth/refreshtoken",localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
             .then((response) => {
               const token = response.data.data; // Token이 Access만 올수도, Access&Refresh가 같이 올수도있ㅇ듬
               if (
@@ -175,7 +175,7 @@ function Post() {
         .catch((error) => {
           console.log(error);
           axios
-            .post(path) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
+            .post("/auth/refreshtoken",localStorage.getItem("Refresh_token"))//에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
             .then((response) => {
               const token = response.data.data; // Token이 Access만 올수도, Access&Refresh가 같이 올수도있ㅇ듬
               if (
