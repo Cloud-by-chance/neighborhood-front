@@ -72,6 +72,7 @@ function Post() {
       if (isEdit) {
         const result = await axios.get(
           "http://localhost:8081/api/v1/post/" + selectedData.post_id
+          ,config
         );
 
         setForm({

@@ -53,7 +53,7 @@ export default function PostNewForm() {
     .then((response)=>{ console.log(response.data)} )
     .catch((error) => 
         { 
-          var path = "/v1/refreshtoken?token="+localStorage.getItem("Refresh_token");
+          var path = "/auth/refreshtoken?token="+localStorage.getItem("Refresh_token");
           console.log(path)
           axiosInstance.post(path)
           .then((response) => {console.log("토큰 재발급 "+response.data.data)
