@@ -86,7 +86,7 @@ function Login() {
         "Content-Type": "application/json",
       };
       await axiosInstance
-        .post("/auth/signin", JSON.stringify(inputs), { headers })
+        .post("/auth/login", JSON.stringify(inputs), { headers })
         .then((response) => {
           console.log("response:", response.data.data);
           localStorage.setItem("Response", response);

@@ -68,13 +68,13 @@ export default ({
   const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem("JWT") !== null) {
+    if (localStorage.getItem("Access_token") !== null) {
       setIsLogin(true);
     }
   });
   const onLogout = () => {
-    localStorage.removeItem("ReTok");
-    localStorage.removeItem("JWT");
+    localStorage.removeItem("Refresh_token");
+    localStorage.removeItem("Access_token");
     document.location.href = "/";
   };
 
