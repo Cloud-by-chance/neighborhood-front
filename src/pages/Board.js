@@ -23,6 +23,11 @@ function Board() {
   const offset = (page - 1) * limit;
 
   const baseUrl = "http://localhost:8081";
+  let config = {
+    headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
+  };
+  var path =
+    "/auth/refreshtoken?token=" + localStorage.getItem("Refresh_token"); //Token 재발급을 위한 경로 미리 지정
 
   useEffect(() => {
     // console.log(cookieId);
@@ -31,12 +36,37 @@ function Board() {
 
   async function getPosts() {
     await axios
-      .get(baseUrl + "/api/v1/posts")
+      .get(baseUrl + "/api/v1/posts", config) //항상 헤더를 담아서
       .then((response) => {
-        setInfo(response.data);
+        setInfo(response.data); //제대로 받았으면 data를 Info에 넣어줌
       })
       .catch((error) => {
         console.log(error);
+
+        axios
+          .post(path) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
+          .then((response) => {
+            const token = response.data.data; // Token이 Access만 올수도, Access&Refresh가 같이 올수도있ㅇ듬
+            if (token.length() > localStorage.getItem("Access_token").length) {
+              //Access 토큰보다 길면 Refresh랑 Access가 같이 온거이므로 Split 작업 실행
+              const split_token = token.split(","); // access 토큰이랑 refresh 토큰이 주어진다. ,로 나눔
+              //2 작업은 access token과 refresh 토큰의 정확한 값을 위해 사용
+              split_token[0] = split_token[0].replace("[", "");
+              split_token[1] = split_token[1].replace("]", "");
+              localStorage.setItem("Access_token", split_token[1]);
+              localStorage.setItem("Refresh_token", split_token[0]);
+            } else {
+              localStorage.setItem("Access_token", token);
+            }
+            location.reload(); //새로 고침 해준다 getPosts가 랜더링 될때마다 호출되니깐 자동으로 get 요청 실행됨
+          })
+          .catch((error) => {
+            notification.open({
+              message: "인증 실패!",
+              description: "다시 로그인을 확인해 주세요",
+              icon: <FrownOutlined style={{ color: "#ff3333" }} />,
+            });
+          }); //재발급이 error가 난거면 진자 문제 생긴거임
       });
   }
 
@@ -47,12 +77,52 @@ function Board() {
   const handleRemove = (id) => {
     console.log(id);
     axios
-      .delete(baseUrl + "/api/v1/post/" + id)
+      .delete(baseUrl + "/api/v1/post/" + id, config) //마찬 가지로 Header를 담아 보낸다.
       .then((response) => {
         setInfo((info) => info.filter((item) => item.post_id !== id));
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        console.log(error);
+
+        axios
+          .post(path) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
+          .then((response) => {
+            const token = response.data.data; // Token이 Access만 올수도, Access&Refresh가 같이 올수도있ㅇ듬
+            if (token.length() > localStorage.getItem("Access_token").length) {
+              //Access 토큰보다 길면 Refresh랑 Access가 같이 온거이므로 Split 작업 실행
+              const split_token = token.split(","); // access 토큰이랑 refresh 토큰이 주어진다. ,로 나눔
+              //2 작업은 access token과 refresh 토큰의 정확한 값을 위해 사용
+              split_token[0] = split_token[0].replace("[", "");
+              split_token[1] = split_token[1].replace("]", "");
+              localStorage.setItem("Access_token", split_token[1]);
+              localStorage.setItem("Refresh_token", split_token[0]);
+            } else {
+              localStorage.setItem("Access_token", token);
+            }
+            //다시 delete 실행
+            let config = {
+              headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
+            };
+            axios
+              .delete(baseUrl + "/api/v1/post/" + id, config) //마찬 가지로 Header를 담아 보낸다.
+              .then((response) => {
+                setInfo((info) => info.filter((item) => item.post_id !== id));
+              })
+              .catch((error) => {
+                notification.open({
+                  message: "인증 실패!",
+                  description: "다시 로그인을 확인해 주세요",
+                  icon: <FrownOutlined style={{ color: "#ff3333" }} />,
+                });
+              });
+          })
+          .catch((error) => {
+            notification.open({
+              message: "인증 실패!",
+              description: "다시 로그인을 확인해 주세요",
+              icon: <FrownOutlined style={{ color: "#ff3333" }} />,
+            });
+          }); //재발급이 error가 난거면 진자 문제 생긴거임
       });
   };
 
@@ -65,7 +135,6 @@ function Board() {
       update_dt: item.update_dt,
     };
 
-    // console.log(selectedData);
     setSelected(selectedData);
   };
 
@@ -76,7 +145,7 @@ function Board() {
         <div className="text-xl font-bold mt-5 mb-3 text-center">
           <h1>게 시 판</h1>
         </div>
-          { !cookieId ? <></> : <WriteBtn />}
+        {!cookieId ? <></> : <WriteBtn />}
 
         {/* <label>
           페이지 당 표시할 게시물 수:&nbsp;
@@ -124,7 +193,6 @@ function Board() {
             />
           </table>
         </div>
-
       </div>
       <footer>
         <Pagination

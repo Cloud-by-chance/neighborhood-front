@@ -17,7 +17,7 @@ import { useHistory } from "react-router-dom";
 import { useState } from "react";
 
 const Container = tw(
-  ContainerBase 
+  ContainerBase
 )`min-h-screen bg-primary-900 text-white font-medium flex justify-center -m-8`;
 const Content = tw.div`max-w-screen-xl m-0 sm:mx-20 sm:my-16 bg-white text-gray-900 shadow sm:rounded-lg flex justify-center flex-1`;
 const MainContainer = tw.div`lg:w-1/2 xl:w-5/12 p-6 sm:p-12`;
@@ -86,18 +86,18 @@ function Login() {
         "Content-Type": "application/json",
       };
       await axiosInstance
-      .post("/v1/signin", JSON.stringify(inputs), { headers })
-      .then((response) => {
-        console.log("response:", response.data.data);
-        localStorage.setItem("Response", response);
-        const token = response.data.data.split(","); // access 토큰이랑 refresh 토큰이 주어진다. ,로 나눔
-        //2 작업은 access token과 refresh 토큰의 정확한 값을 위해 사용
-        token[0]=token[0].replace('[',''); 
-        token[1]=token[1].replace(']','');
+        .post("/auth/signin", JSON.stringify(inputs), { headers })
+        .then((response) => {
+          console.log("response:", response.data.data);
+          localStorage.setItem("Response", response);
+          const token = response.data.data.split(","); // access 토큰이랑 refresh 토큰이 주어진다. ,로 나눔
+          //2 작업은 access token과 refresh 토큰의 정확한 값을 위해 사용
+          token[0] = token[0].replace("[", "");
+          token[1] = token[1].replace("]", "");
 
-        // localStorage.setItem("JWT", token);
-        localStorage.setItem("Access_token", token[1]);
-        localStorage.setItem("Refresh_token", token[0]);
+          // localStorage.setItem("JWT", token);
+          localStorage.setItem("Access_token", token[1]);
+          localStorage.setItem("Refresh_token", token[0]);
           history.push("/");
         })
         .catch((error) => {

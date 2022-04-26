@@ -85,14 +85,14 @@ function Signup() {
     e.preventDefault();
     console.log(inputs);
     axiosInstance
-      .post("/v1/signup", JSON.stringify(inputs), { headers })
+      .post("/auth/signup", JSON.stringify(inputs), { headers })
       .then((response) => {
         console.log("response:", response);
         history.push("/login");
-// <<<<<<< HEAD
-// =======
+        // <<<<<<< HEAD
+        // =======
         window.location.reload();
-// >>>>>>> d61ebdc56a323c52cfdb69cd0f103baa875424d0
+        // >>>>>>> d61ebdc56a323c52cfdb69cd0f103baa875424d0
       })
       .catch((error) => {
         if (error.response) {
