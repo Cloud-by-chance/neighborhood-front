@@ -10,7 +10,8 @@ import { BeakerIcon } from "@heroicons/react/solid";
 import { getCookie } from "utils/cookies";
 import WriteBtn from "components/Board/WriteBtn";
 import Pagination from "../components/Board/pagination";
-
+import { message, notification } from "antd";
+import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
 function Board() {
   const [info, setInfo] = useState([]);
   const [selected, setSelected] = useState("");
@@ -58,7 +59,7 @@ function Board() {
             } else {
               localStorage.setItem("Access_token", token);
             }
-            location.reload(); //새로 고침 해준다 getPosts가 랜더링 될때마다 호출되니깐 자동으로 get 요청 실행됨
+            window.location.reload(); //새로 고침 해준다 getPosts가 랜더링 될때마다 호출되니깐 자동으로 get 요청 실행됨
           })
           .catch((error) => {
             notification.open({

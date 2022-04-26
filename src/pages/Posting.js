@@ -18,6 +18,8 @@ import uml from "@toast-ui/editor-plugin-uml";
 import axios from "axios";
 import { getCookie } from "utils/cookies";
 
+import { message, notification } from "antd";
+import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
 let config = {
   headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
 };
