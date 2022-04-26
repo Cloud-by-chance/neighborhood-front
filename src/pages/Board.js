@@ -5,7 +5,7 @@ import Post from "../components/page/Post";
 import Header from "components/headers/light";
 import Modal from "../components/Board/Modal";
 import Button from "@material-tailwind/react/Button";
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Link, useHistory } from "react-router-dom";
 import { BeakerIcon } from "@heroicons/react/solid";
 import { getCookie } from "utils/cookies";
 import WriteBtn from "components/Board/WriteBtn";
@@ -23,7 +23,7 @@ function Board() {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
-
+  const history = useHistory();
   const baseUrl = "http://localhost:8081";
   let config = {
     headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
@@ -48,9 +48,10 @@ function Board() {
         axiosInstance
           .post("/auth/refreshtoken", localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
           .then((response) => {
-            console.log(response.data.data)
+            
             const token = response.data.data; // Token이 Access만 올수도, Access&Refresh가 같이 올수도있ㅇ듬
-            if ('[' in token) {
+            console.log(token.charAt(0))
+            if (token.charAt(0) =='[') {
               //Access 토큰보다 길면 Refresh랑 Access가 같이 온거이므로 Split 작업 실행
               const split_token = token.split(","); // access 토큰이랑 refresh 토큰이 주어진다. ,로 나눔
               //2 작업은 access token과 refresh 토큰의 정확한 값을 위해 사용
@@ -61,7 +62,7 @@ function Board() {
             } else {
               localStorage.setItem("Access_token", token);
             }
-            window.location.reload(); //새로 고침 해준다 getPosts가 랜더링 될때마다 호출되니깐 자동으로 get 요청 실행됨
+            window.location.reload();//새로 고침 해준다 getPosts가 랜더링 될때마다 호출되니깐 자동으로 get 요청 실행됨
           })
           .catch((error) => {
             notification.open({
