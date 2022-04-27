@@ -64,11 +64,11 @@ export default ({ roundedHeaderButton }) => {
               가져와 필요한 정보를 제공하며 동네 커뮤니티를 통해 이웃 사촌간의
               유대를 키워나가는 것을 목표로 하고 있습니다.
             </Paragraph>
-            <Actions>
+            {/* <Actions>
               <input type="text" placeholder="Your E-mail Address" />
 
               <button> Get Started </button>
-            </Actions>
+            </Actions> */}
           </LeftColumn>
           <RightColumn>
             <IllustrationContainer>

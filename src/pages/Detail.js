@@ -20,6 +20,9 @@ import NoSSR from "@mpth/react-no-ssr";
 import TestContent from "components/Board/TestContent";
 import { axiosInstance } from "components/api";
 
+import Header from "../components/headers/light";
+import Input from "@material-tailwind/react/Input";
+
 function Detail() {
   const location = useLocation();
   const [selectedData, setSelectedData] = useState(location.state.selectedData);
@@ -132,27 +135,45 @@ function Detail() {
 
   return (
     <>
-      <div id="title">
+    <Header />
+    <div id="pageCon" className="flex justify-center">
+        <div className="flex justify-center flex-col" style={{width: '60%'}}>
+            <h1 className="font-bold text-xl mt-10">{title}</h1>
+            {/* <div id="titleCon" className="flex justify-start rounded border"
+                style={{height: '35px', verticalAlign: 'middle'}}
+            > */}
         {/* <h1>Title</h1>
             <h1>{content}</h1> */}
-        <h1>{title}</h1>
+                {/* <div id="title" className="flex" style={{verticalAlign: 'middle'}}>
+                    
+                    <h1>{title}</h1>
+                </div> */}
+            {/* </div> */}
+            <div id="viewerCon" className="flex justify-start mt-5 border border-solid rounded"
+                style={{height: '650px'}}
+            >
+                {/* style={{border: 'solid 1px',
+                        borderRadius: '40px'
+                        }}> */}
+                <div id="viewer" dangerouslySetInnerHTML={{ __html: content.content }}>
+                    {/* <Viewer initialValue='<h1>안녕하세요.</h1>' /> */}
+                    {/* <NoSSR>
+                            <Viewer initialValue={content} 
+                                    ref={viewerRef}
+                            />
+                        </NoSSR> */}
+                    {/* { !content ? <></> : <Viewer initialValue={content} />}
+                        <Viewer initialValue={content}
+                                // onLoadUI={ onLoading() }
+                                // onShow={onLoading()}
+                                ref={viewerRef} /> */}
+                    {/* <h1>{content}</h1> */}
+                    {/* <CustomViewer content={content}/> */}
+                    {/* <TestContent content={content} /> */}
+                </div>
+            </div>
       </div>
-      <div id="viewer" dangerouslySetInnerHTML={{ __html: content.content }}>
-        {/* <Viewer initialValue='<h1>안녕하세요.</h1>' /> */}
-        {/* <NoSSR>
-                <Viewer initialValue={content} 
-                        ref={viewerRef}
-                />
-            </NoSSR> */}
-        {/* { !content ? <></> : <Viewer initialValue={content} />}
-            <Viewer initialValue={content}
-                    // onLoadUI={ onLoading() }
-                    // onShow={onLoading()}
-                    ref={viewerRef} /> */}
-        {/* <h1>{content}</h1> */}
-        {/* <CustomViewer content={content}/> */}
-        {/* <TestContent content={content} /> */}
-      </div>
+    </div>
     </>
   );
 }
