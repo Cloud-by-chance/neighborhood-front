@@ -87,12 +87,10 @@ function Signup() {
     axiosInstance
       .post("/auth/signup", JSON.stringify(inputs), { headers })
       .then((response) => {
-        console.log("response:", response);
+        console.log("응답입니다. response:", response);
         history.push("/login");
-        // <<<<<<< HEAD
-        // =======
         window.location.reload();
-        // >>>>>>> d61ebdc56a323c52cfdb69cd0f103baa875424d0
+
       })
       .catch((error) => {
         if (error.response) {
