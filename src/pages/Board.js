@@ -40,8 +40,10 @@ function Board() {
      axiosInstance
       .get("/api/v1/posts", config) //항상 헤더를 담아서
       .then((response) => {
-        console.log("정상 처리 했습니다.")
+        console.log("정상 처리 했습니다. ")
+        console.log(response);
         setInfo(response.data); //제대로 받았으면 data를 Info에 넣어줌
+       
       })
       .catch((error) => {
         console.log("에러 발생"+error);

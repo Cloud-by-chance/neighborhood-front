@@ -42,7 +42,8 @@ const Auth = () => {
       axiosInstance
         .post("/auth/kakaologin", JSON.stringify(token), { headers })
         .then((res) => {
-          console.log("KAKAO_1"+res.data)
+          console.log("KAKAO_1")
+          console.log(res.data)
           var user = {
             token: res.data.list[0],
             userName: res.data.list[1],

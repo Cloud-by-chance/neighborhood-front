@@ -15,7 +15,7 @@ const KakaoJWT = () => {
     accessToken: accessToken,
   });
   axiosInstance
-    .post("/v1/kakaologin", payload)
+    .post("/auth/kakaologin", payload)
     .then((response) => {
       console.log("갓성결");
       history.push("/");
