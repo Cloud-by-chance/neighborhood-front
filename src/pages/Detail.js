@@ -51,8 +51,9 @@ function Detail() {
       headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
     };
     async function initialValue() {
-      const result = await axiosInstance
-        .get("/api/v1/post/" + selectedData.post_id,config)
+      const result = await //axiosInstance
+        // .get("/api/v1/post/" + selectedData.post_id,config)
+        axios.get("http://k8s-default-ingresst-91fe9a8044-1507004944.ap-northeast-2.elb.amazonaws.com/api/v1/post/"+selectedData.post_id, config)
         .then(function (res) {
           console.log(res.data.content);
           console.log(typeof res.data.content);
@@ -82,8 +83,11 @@ function Detail() {
             } else {
               localStorage.setItem("Access_token", token);
             }
+            let config = {
+              headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
+            };
             // 실패한 작업 재실행
-             axiosInstance.get("/api/v1/post/" + selectedData.post_id, config)
+            axios.get("http://k8s-default-ingresst-91fe9a8044-1507004944.ap-northeast-2.elb.amazonaws.com/api/v1/post/"+selectedData.post_id, config)
              .then(function (res) {
               console.log(res.data.content);
               console.log(typeof res.data.content);

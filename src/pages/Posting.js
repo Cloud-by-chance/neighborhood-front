@@ -67,15 +67,20 @@ function Post() {
 
   // 최초 한 번만 실행(Constructor 역할)
   useEffect(() => {
+    let config = {
+      headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
+    };
     const editorInstance = editorRef.current.getInstance();
     console.log(editorInstance);
 
     async function initializingEditor() {
       if (isEdit) {
-        const result = await axiosInstance.get(
-          "/api/v1/post/" + selectedData.post_id
-          ,config
-        ).catch(
+        const result = 
+        // await axiosInstance.get(
+        //   "/api/v1/post/" + selectedData.post_id
+        //   ,config)
+        await  axios.get("http://k8s-default-ingresst-91fe9a8044-1507004944.ap-northeast-2.elb.amazonaws.com/api/v1/post/"+selectedData.post_id, config)
+        .catch(
           axiosInstance
           .post("/auth/refreshtoken", localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
           .then((response) => {
@@ -94,10 +99,11 @@ function Post() {
               localStorage.setItem("Access_token", token);
             }
             // 실패한 작업 재실행
-             axiosInstance.get(
-              "/api/v1/post/" + selectedData.post_id
-              ,config
-            ).then((response)=>{
+            //  axiosInstance.get(
+            //   "/api/v1/post/" + selectedData.post_id
+            //   ,config).
+            axios.get("http://k8s-default-ingresst-91fe9a8044-1507004944.ap-northeast-2.elb.amazonaws.com/api/v1/post/"+selectedData.post_id, config)
+            .then((response)=>{
               result= response;
             })
           })
@@ -137,8 +143,12 @@ function Post() {
 
     // console.log(form);
     if (isEdit) {
-      axiosInstance
-        .put("/api/v1/post/" + postId, form, config) //"주소", "데이터", "헤더"
+      let config = {
+        headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
+      };
+      // axiosInstance
+      //   .put("/api/v1/post/" + postId, form, config) //"주소", "데이터", "헤더"
+      axios.put("http://k8s-default-ingresst-91fe9a8044-1507004944.ap-northeast-2.elb.amazonaws.com/api/v1/post/"+postId,form, config)
         .then(() => {
           history.push("/board");
         })
@@ -168,12 +178,13 @@ function Post() {
                   "X-AUTH-TOKEN": localStorage.getItem("Access_token"),
                 }, 
               };
-              axiosInstance
-                .put(
-                  "/api/v1/post/" + postId,
-                  form,
-                  config
-                ) //"주소", "데이터", "헤더"
+              // axiosInstance
+              //   .put(
+              //     "/api/v1/post/" + postId,
+              //     form,
+              //     config
+              //   ) //"주소", "데이터", "헤더"
+              axios.put("http://k8s-default-ingresst-91fe9a8044-1507004944.ap-northeast-2.elb.amazonaws.com/api/v1/post/"+postId,form, config)
                 .then(() => {
                   history.push("/board");
                 });
@@ -188,8 +199,9 @@ function Post() {
         });
     } else {
       console.log(form);
-      axiosInstance
-        .post("/api/v1/post", form, config)
+      // axiosInstance
+      //   .post("/api/v1/post", form, config)
+        axios.post("http://k8s-default-ingresst-91fe9a8044-1507004944.ap-northeast-2.elb.amazonaws.com/api/v1/post/"+postId,form, config)
         .then(() => {
           setForm({
             ...form,
@@ -221,14 +233,16 @@ function Post() {
               localStorage.setItem("Access_token", token);
             }
               //재발급 받은 토큰으로 다시 실행
+              
               let config = {
                 headers: {
                   "X-AUTH-TOKEN": localStorage.getItem("Access_token"),
                 }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
               };
               //post를 재 실행
-               axiosInstance
-                .post("/api/v1/post", form, config)
+              //  axiosInstance
+              //   .post("/api/v1/post", form, config)
+              axios.post("http://k8s-default-ingresst-91fe9a8044-1507004944.ap-northeast-2.elb.amazonaws.com/api/v1/post"+postId,form, config)
                 .then(() => {
                   setForm({
                     ...form,

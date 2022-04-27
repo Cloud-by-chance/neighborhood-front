@@ -46,7 +46,7 @@ function Board() {
         
       })
       .catch((error) => {
-        console.log("에러 발생"+error);
+        
         //재발급 과정을 시작한다.
         axiosInstance
           .post("/auth/refreshtoken", localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
@@ -81,9 +81,13 @@ function Board() {
   // };
 
   const handleRemove = (id) => {
+    let config = {
+      headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
+    };
     console.log(id);
-    axiosInstance
-      .delete( "/api/v1/post/" + id, config) //마찬 가지로 Header를 담아 보낸다.
+    // axiosInstance
+    //   .delete( "/api/v1/post/" + id, config) //마찬 가지로 Header를 담아 보낸다.
+    axios.delete("http://k8s-default-ingresst-91fe9a8044-1507004944.ap-northeast-2.elb.amazonaws.com/api/v1/post/"+id, config)
       .then((response) => {
         setInfo((info) => info.filter((item) => item.post_id !== id));
       })
@@ -106,9 +110,13 @@ function Board() {
             } else {
               localStorage.setItem("Access_token", token);
             }
+            let config = {
+              headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
+            };
             //error나서 하지 못한 delete 작업 다시 적용
-            axiosInstance
-               .delete("/api/v1/post/" + id, config) //마찬 가지로 Header를 담아 보낸다.
+            // axiosInstance
+            //    .delete("/api/v1/post/" + id, config) //마찬 가지로 Header를 담아 보낸다.
+            axios.delete("http://k8s-default-ingresst-91fe9a8044-1507004944.ap-northeast-2.elb.amazonaws.com/api/v1/post/"+id, config)
                 .then((response) => {
                 setInfo((info) => info.filter((item) => item.post_id !== id));
                 }).catch((error) => {
