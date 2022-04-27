@@ -34,7 +34,7 @@ const Auth = () => {
 
       //[카카오 토큰] 로그인, 로그아웃 할때 필요
       localStorage.setItem("k_Actok", token.accessToken);
-      localStorage.setItem("Refresh_token", token.refreshToken);
+      localStorage.setItem("k_Retok", token.refreshToken);
 
       var headers = {
         "Content-Type": "application/json",
@@ -48,6 +48,7 @@ const Auth = () => {
             ID: res.data.list[2],
             email: res.data.list[3],
             image: res.data.list[4],
+            refresh_token: res.data.list[5],
           };
 
           let date = new Date(); //쿠키를 생성한 그 날의 날짜, 시간 생성
@@ -70,6 +71,7 @@ const Auth = () => {
 
           //jwt 토큰
           localStorage.setItem("Access_token", user.token);
+          localStorage.setItem("Refresh_token", user.refresh_token);
 
           notification.open({
             message: "로그인 성공",

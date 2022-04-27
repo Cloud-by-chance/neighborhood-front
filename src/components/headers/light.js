@@ -75,21 +75,22 @@ export default ({
     }
   });
 
-  const kakaoAccessToken = localStorage.getItem("k_Actok");
-
+  const tokens = {
+    refreshToken: localStorage.getItem("Refresh_token"),
+    accessToken: localStorage.getItem("k_Actok"),
+    jwt: localStorage.getItem("Access_token"),
+  };
+  var headers = {
+    "Content-Type": "application/json",
+    "X-AUTH-TOKEN": localStorage.getItem("Access_token"),
+  };
   const onLogout = () => {
-    axiosInstance.post(
-      "/auth/logout",
-      localStorage.getItem("Refresh_Token") +
-        " " +
-        localStorage.getItem("k_Actok")
-        ? localStorage.getItem("k_Actok")
-        : ""
-    );
+    axiosInstance.post("/auth/logout", JSON.stringify(tokens), { headers });
 
     localStorage.removeItem("Refresh_token");
     localStorage.removeItem("Access_token");
     localStorage.removeItem("k_Actok");
+    localStorage.removeItem("k_Retok");
 
     document.location.href = "/";
   };
