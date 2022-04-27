@@ -10,7 +10,7 @@ import logo from "../../images/logo.svg";
 import { ReactComponent as MenuIcon } from "feather-icons/dist/icons/menu.svg";
 import { ReactComponent as CloseIcon } from "feather-icons/dist/icons/x.svg";
 import { Button } from "antd";
-import { getCookie } from "../../utils/cookies";
+import { deleteCookie, getCookie } from "../../utils/cookies";
 import axios from "axios";
 import { axiosInstance } from "components/api.js";
 
@@ -91,7 +91,8 @@ export default ({
     localStorage.removeItem("Access_token");
     localStorage.removeItem("k_Actok");
     localStorage.removeItem("k_Retok");
-
+    deleteCookie("image");
+    deleteCookie("userName")
     document.location.href = "/";
   };
 
