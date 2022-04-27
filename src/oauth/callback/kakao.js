@@ -40,8 +40,9 @@ const Auth = () => {
         "Content-Type": "application/json",
       };
       axiosInstance
-        .post("/auth/kakaoLogin", JSON.stringify(token), { headers })
+        .post("/auth/kakaologin", JSON.stringify(token), { headers })
         .then((res) => {
+          console.log("KAKAO_1"+res.data)
           var user = {
             token: res.data.list[0],
             userName: res.data.list[1],
@@ -82,6 +83,7 @@ const Auth = () => {
         })
         .catch((e) => {
           alert(e);
+          console.log(e)
           history.replace("/");
         });
     })

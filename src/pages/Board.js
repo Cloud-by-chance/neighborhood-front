@@ -24,7 +24,7 @@ function Board() {
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
   const history = useHistory();
-  const baseUrl = "http://localhost:8081";
+
   let config = {
     headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
   };
@@ -44,7 +44,7 @@ function Board() {
         setInfo(response.data); //제대로 받았으면 data를 Info에 넣어줌
       })
       .catch((error) => {
-        console.log(error);
+        console.log("에러 발생"+error);
         //재발급 과정을 시작한다.
         axiosInstance
           .post("/auth/refreshtoken", localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
@@ -68,7 +68,7 @@ function Board() {
           .catch((error) => {
             notification.open({
               message: "인증 실패!",
-              description: "다시 로그인을 확인해 주세요",
+              description: "Getpost를 확인해 주세요",
               icon: <FrownOutlined style={{ color: "#ff3333" }} />,
             });
           }); //재발급이 error가 난거면 진자 문제 생긴거임
@@ -81,8 +81,8 @@ function Board() {
 
   const handleRemove = (id) => {
     console.log(id);
-    axios
-      .delete(baseUrl + "/api/v1/post/" + id, config) //마찬 가지로 Header를 담아 보낸다.
+    axiosInstance
+      .delete( "/api/v1/post/" + id, config) //마찬 가지로 Header를 담아 보낸다.
       .then((response) => {
         setInfo((info) => info.filter((item) => item.post_id !== id));
       })
@@ -106,8 +106,8 @@ function Board() {
               localStorage.setItem("Access_token", token);
             }
             //error나서 하지 못한 delete 작업 다시 적용
-              axios
-               .delete(baseUrl + "/api/v1/post/" + id, config) //마찬 가지로 Header를 담아 보낸다.
+            axiosInstance
+               .delete("/api/v1/post/" + id, config) //마찬 가지로 Header를 담아 보낸다.
                 .then((response) => {
                 setInfo((info) => info.filter((item) => item.post_id !== id));
                 }).catch((error) => {
@@ -121,7 +121,7 @@ function Board() {
           .catch((error) => {
             notification.open({
               message: "인증 실패!",
-              description: "다시 로그인을 확인해 주세요",
+              description: "다시 handleRemove를 확인해 주세요",
               icon: <FrownOutlined style={{ color: "#ff3333" }} />,
             });
           }); //재발급이 error가 난거면 진자 문제 생긴거임
