@@ -23,8 +23,7 @@ const Auth = () => {
   });
 
   // access token 가져오기
-  axios
-    .post("https://kauth.kakao.com/oauth/token", payload)
+  axios.post("https://kauth.kakao.com/oauth/token", payload)
     .then((respone) => {
       const token = {
         accessToken: respone.data.access_token,

@@ -75,7 +75,7 @@ function Login() {
   };
 
   const onSubmit = (values) => {
-    async function fn() {
+    function fn() {
       values.preventDefault();
       console.log(values);
       const { id, password } = values; //submit시 보내지는 data를 username, password로 저장
@@ -85,7 +85,7 @@ function Login() {
       var headers = {
         "Content-Type": "application/json",
       };
-      await axiosInstance
+      axiosInstance
         .post("/auth/login", JSON.stringify(inputs), { headers })
         .then((response) => {
           console.log("response:", response.data.data);
