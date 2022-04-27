@@ -37,13 +37,13 @@ function Board() {
   }, []);
 
   function getPosts() {
-     axiosInstance
-      .get("/api/v1/posts", config) //항상 헤더를 담아서
+     axios.get("http://k8s-default-ingresst-91fe9a8044-1507004944.ap-northeast-2.elb.amazonaws.com/api/v1/posts",config)
+      // axiosInstance.get("/api/v1/posts", config) //항상 헤더를 담아서
       .then((response) => {
         console.log("정상 처리 했습니다. ")
         console.log(response);
         setInfo(response.data); //제대로 받았으면 data를 Info에 넣어줌
-       
+        
       })
       .catch((error) => {
         console.log("에러 발생"+error);
@@ -51,7 +51,6 @@ function Board() {
         axiosInstance
           .post("/auth/refreshtoken", localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
           .then((response) => {
-            
             const token = response.data.data; // Token이 Access만 올수도, Access&Refresh가 같이 올수도있ㅇ듬
             console.log(token.charAt(0))
             if (token.charAt(0) =='[') {
