@@ -5,7 +5,7 @@ import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
 import illustration from "images/login-illustration.svg";
-import logo from "images/logo.svg";
+import logo from "images/logo_team.png";
 import googleIconImageSrc from "images/google-icon.png";
 import kakaoIconImageSrc from "images/kakao-icon.png";
 import { KAKAO_AUTH_URL } from "../oauth/OAuth";
@@ -122,11 +122,11 @@ function Login() {
     illustrationImageSrc = illustration,
     headingText = "Sign In To 우리동네 정보통",
     socialButtons = [
-      {
-        iconImageSrc: googleIconImageSrc,
-        text: "Sign In With Google",
-        url: "https://google.com",
-      },
+      // {
+      //   iconImageSrc: googleIconImageSrc,
+      //   text: "Sign In With Google",
+      //   url: "https://google.com",
+      // },
       {
         iconImageSrc: kakaoIconImageSrc,
         text: "Sign In With Kakao",

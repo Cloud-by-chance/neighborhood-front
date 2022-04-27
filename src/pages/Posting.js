@@ -17,10 +17,11 @@ import uml from "@toast-ui/editor-plugin-uml";
 
 import axios from "axios";
 import { getCookie } from "utils/cookies";
-
+import Header from "../components/headers/light";
 import { message, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
 import { axiosInstance } from "components/api";
+
 let config = {
   headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
 };
@@ -252,18 +253,20 @@ function Post() {
   }
   return (
     <>
+    <Header />
       <div className="text-xl font-bold mt-5 mb-2 text-center">
         게시글 추가하기
       </div>
+      <div id="formCon" class="flex justify-center">
       <form
-        className="mt-5 flex flex-col justify-center"
+        className="mt-5 flex flex-col relative"
         onSubmit={handleSubmit}
       >
-        <div style={{ width: "30%" }}>
+        <div style={{ width: "70%" }}>
           {/* <Input className="w-24 mr-5" type="text" color="lightBlue" size="regular" outline={true} required placeholder="작성자"
                             name='user_id' value={form.user_id} onChange={handleChange}/> */}
           <Input
-            className="w-18 ml-5"
+            className="w-18 ml-5 relative"
             type="text"
             color="lightBlue"
             size="regular"
@@ -275,7 +278,7 @@ function Post() {
             onChange={handleChange}
           />
         </div>
-        <div className="mt-5 w-5/6 flex justify-center">
+        <div className="mt-10 w-5/6 flex justify-center relative">
           <Editor
             initialValue={isEdit ? form.content : ""}
             previewStyle="vertical"
@@ -296,7 +299,7 @@ function Post() {
             onChange={contentChange}
           />
         </div>
-        <div className="text-center flex justify-end">
+        <div id="buttons" className="text-center flex justify-end relative mt-10">
           <Button
             color="lightBlue"
             buttonType="outline"
@@ -323,6 +326,7 @@ function Post() {
           </Button>
         </div>
       </form>
+      </div>
     </>
   );
 }

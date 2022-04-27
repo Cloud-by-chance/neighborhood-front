@@ -45,6 +45,7 @@ function Board() {
       })
       .catch((error) => {
         console.log(error);
+        //재발급 과정을 시작한다.
         axiosInstance
           .post("/auth/refreshtoken", localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
           .then((response) => {

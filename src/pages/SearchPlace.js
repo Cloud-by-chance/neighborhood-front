@@ -60,7 +60,7 @@ const SearchPlace= ({ searchPlace }) =>{
       }}
       style={{
         width: "100%",
-        height: "350px",
+        height: "750px",
       }}
       level={3}
       onCreate={setMap}

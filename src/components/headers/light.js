@@ -6,7 +6,8 @@ import { css } from "styled-components/macro"; //eslint-disable-line
 import AboutUs from "pages/AboutUs.js";
 import useAnimatedNavToggler from "../../helpers/useAnimatedNavToggler.js";
 
-import logo from "../../images/logo.svg";
+// import logo from "../../images/logo.svg";
+import logo from "../../images/logo_team.png";
 import { ReactComponent as MenuIcon } from "feather-icons/dist/icons/menu.svg";
 import { ReactComponent as CloseIcon } from "feather-icons/dist/icons/x.svg";
 import { Button } from "antd";
@@ -28,6 +29,12 @@ export const NavLink = tw.a`
   text-lg my-2 lg:text-sm lg:mx-6 lg:my-0
   font-semibold tracking-wide transition duration-300
   pb-1 border-b-2 border-transparent hover:border-primary-500 hocus:text-primary-500
+`;
+
+export const Username = tw.p`
+  text-lg my-2 lg:text-sm lg:mx-6 lg:my-0
+  font-semibold tracking-wide transition duration-300
+  pb-1 border-b-2 border-transparent 
 `;
 
 export const PrimaryLink = tw(NavLink)`
@@ -98,9 +105,9 @@ export default ({
 
   const defaultLinks = [
     <NavLinks key={1}>
-      <NavLink href="/about">About</NavLink>
-      <NavLink href="/community">Community</NavLink>
-      <NavLink href="/board">Board</NavLink>
+      <NavLink href="/maps">Maps</NavLink>
+      <NavLink href="/board">Community</NavLink>
+      {/* <NavLink href="/board">Board</NavLink> */}
       <NavLink href="/login">Login</NavLink>
     </NavLinks>,
   ];
@@ -113,10 +120,11 @@ export default ({
           width="30px"
           src={decodeURIComponent(getCookie("image"))}
         ></img>
-        <NavLink>{decodeURIComponent(getCookie("userName"))}</NavLink>
-        <NavLink href="/about">About</NavLink>
-        <NavLink href="/community">Community</NavLink>
-        <NavLink href="/board">Board</NavLink>
+        {/* <NavLink>{decodeURIComponent(getCookie("userName"))}</NavLink> */}
+        <Username>{decodeURIComponent(getCookie("userName"))}</Username>
+        <NavLink href="/maps">Maps</NavLink>
+        <NavLink href="/board">Community</NavLink>
+        {/* <NavLink href="/board">Board</NavLink> */}
         {/* <Button onClick={onLogout}>Logout</Button> */}
         <NavLink href="/" onClick={onLogout}>
           Logout
@@ -130,7 +138,7 @@ export default ({
   const collapseBreakpointCss =
     collapseBreakPointCssMap[collapseBreakpointClass];
 
-  const defaultLogoLink = (
+  const defaultLogoLink = (    
     <LogoLink href="/">
       <img src={logo} alt="logo" />
       우리동네 정보
