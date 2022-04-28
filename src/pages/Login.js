@@ -88,7 +88,7 @@ function Login() {
       axiosInstance
         .post("/auth/login", JSON.stringify(inputs), { headers })
         .then((response) => {
-          console.log("response:", response.data.data);
+          console.log("response:", response.data);
           localStorage.setItem("Response", response);
           const token = response.data.data.split(","); // access 토큰이랑 refresh 토큰이 주어진다. ,로 나눔
           //2 작업은 access token과 refresh 토큰의 정확한 값을 위해 사용
