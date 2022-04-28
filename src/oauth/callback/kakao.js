@@ -23,8 +23,7 @@ const Auth = () => {
   });
 
   // access token 가져오기
-  axios
-    .post("https://kauth.kakao.com/oauth/token", payload)
+  axios.post("https://kauth.kakao.com/oauth/token", payload)
     .then((respone) => {
       const token = {
         accessToken: respone.data.access_token,
@@ -40,8 +39,10 @@ const Auth = () => {
         "Content-Type": "application/json",
       };
       axiosInstance
-        .post("/auth/kakaoLogin", JSON.stringify(token), { headers })
+        .post("/auth/kakaologin", JSON.stringify(token), { headers })
         .then((res) => {
+          console.log("KAKAO_1")
+          console.log(res.data)
           var user = {
             token: res.data.list[0],
             userName: res.data.list[1],
@@ -82,6 +83,7 @@ const Auth = () => {
         })
         .catch((e) => {
           alert(e);
+          console.log(e)
           history.replace("/");
         });
     })

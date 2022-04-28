@@ -5,6 +5,7 @@ import { Map } from "react-kakao-maps-sdk";
 import { PlusOutlined, FrownOutlined } from "@ant-design/icons";
 import MapContainer from "pages/MapContainer";
 import SearchPlace from "pages/SearchPlace";
+import Header from "../../components/headers/light";
 
 const Test_MAP = () => {
     const [select,setSelect]=useState(""); //버튼
@@ -85,25 +86,38 @@ const Test_MAP = () => {
     
     return(
         <>
+        <div id="header">
+            <Header />
+        </div>
+
+        <div className="flex justify-center mt-5" style={{width: '70%'}}>
+            <div className="flex">
+                <Form>
+                    <Space size={5}>
+                    <Search placeholder="input search text" onSearch={onSearch} enterButton />
+                    <Button type="primary" onClick={() => {clickHandler("화장실")}} >화장실</Button>
+                    
+                    <Button type="primary" onClick={() => {clickHandler("편의점")}}>편의점</Button>
+                    
+                    <Button type="primary" onClick={() => {clickHandler("세차장")}} >세차장</Button>
+                    
+                    <Button type="primary" onClick={() => {clickHandler("음식점")}} >음식점</Button>
+                    
+                    <Button type="primary" onClick={() => {clickHandler("지하철")}} >지하철</Button>
+                    </Space>
+                    
+                    {/* <MapContainer searchPlace={place} />  */}
+                    
+                </ Form>
+            </div>            
+        </div>
+
         
-        <Form>
-            <Space size={5}>
-            <Search placeholder="input search text" onSearch={onSearch} enterButton />
-            <Button type="primary" onClick={() => {clickHandler("화장실")}} >화장실</Button>
-            
-            <Button type="primary" onClick={() => {clickHandler("편의점")}}>편의점</Button>
-            
-            <Button type="primary" onClick={() => {clickHandler("세차장")}} >세차장</Button>
-            
-            <Button type="primary" onClick={() => {clickHandler("음식점")}} >음식점</Button>
-            
-            <Button type="primary" onClick={() => {clickHandler("지하철")}} >지하철</Button>
-            </Space>
-            
-            {/* <MapContainer searchPlace={place} />  */}
-            <SearchPlace searchPlace={place} />
-        </ Form>
-        
+        <div className="flex justify-center" style={{width: '66%', margin: '0 auto'}}>
+            <div className="flex" style={{width: '100%'}}>
+                <SearchPlace searchPlace={place} />
+            </div>
+        </div>
         
         </>
     );

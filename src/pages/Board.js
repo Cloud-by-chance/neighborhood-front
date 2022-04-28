@@ -24,7 +24,7 @@ function Board() {
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
   const history = useHistory();
-  const baseUrl = "http://localhost:8081";
+
   let config = {
     headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
   };
@@ -37,18 +37,22 @@ function Board() {
   }, []);
 
   function getPosts() {
-     axiosInstance
-      .get("/api/v1/posts", config) //항상 헤더를 담아서
+    let config = {
+      headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
+    };
+    //  axios.get("http://k8s-default-ingresst-91fe9a8044-1507004944.ap-northeast-2.elb.amazonaws.com/api/v1/posts",config)
+      axiosInstance.get("/api/v1/posts", config) //항상 헤더를 담아서
       .then((response) => {
-        console.log("정상 처리 했습니다.")
+        console.log("정상 처리 했습니다. ")
+        console.log(response);
         setInfo(response.data); //제대로 받았으면 data를 Info에 넣어줌
+        
       })
       .catch((error) => {
-        console.log(error);
-        axiosInstance
-          .post("/auth/refreshtoken", localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
+        
+        //재발급 과정을 시작한다.
+        axiosInstance.post("/auth/refreshtoken", localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
           .then((response) => {
-            
             const token = response.data.data; // Token이 Access만 올수도, Access&Refresh가 같이 올수도있ㅇ듬
             console.log(token.charAt(0))
             if (token.charAt(0) =='[') {
@@ -62,12 +66,15 @@ function Board() {
             } else {
               localStorage.setItem("Access_token", token);
             }
+            let config = {
+              headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
+            };
             window.location.reload();//새로 고침 해준다 getPosts가 랜더링 될때마다 호출되니깐 자동으로 get 요청 실행됨
           })
           .catch((error) => {
             notification.open({
               message: "인증 실패!",
-              description: "다시 로그인을 확인해 주세요",
+              description: "Getpost를 확인해 주세요",
               icon: <FrownOutlined style={{ color: "#ff3333" }} />,
             });
           }); //재발급이 error가 난거면 진자 문제 생긴거임
@@ -79,16 +86,18 @@ function Board() {
   // };
 
   const handleRemove = (id) => {
+    let config = {
+      headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
+    };
     console.log(id);
-    axios
-      .delete(baseUrl + "/api/v1/post/" + id, config) //마찬 가지로 Header를 담아 보낸다.
+    axiosInstance.delete( "/api/v1/post/" + id, config) //마찬 가지로 Header를 담아 보낸다.
+    // axios.delete("http://k8s-default-ingresst-91fe9a8044-1507004944.ap-northeast-2.elb.amazonaws.com/api/v1/post/"+id, config)
       .then((response) => {
         setInfo((info) => info.filter((item) => item.post_id !== id));
       })
       .catch((error) => {
         console.log(error);
-        axiosInstance
-          .post("/auth/refreshtoken", localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
+        axiosInstance.post("/auth/refreshtoken", localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
           .then((response) => {
             
             const token = response.data.data; // Token이 Access만 올수도, Access&Refresh가 같이 올수도있ㅇ듬
@@ -104,9 +113,12 @@ function Board() {
             } else {
               localStorage.setItem("Access_token", token);
             }
+            let config = {
+              headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
+            };
             //error나서 하지 못한 delete 작업 다시 적용
-              axios
-               .delete(baseUrl + "/api/v1/post/" + id, config) //마찬 가지로 Header를 담아 보낸다.
+            axiosInstance.delete("/api/v1/post/" + id, config) //마찬 가지로 Header를 담아 보낸다.
+            // axios.delete("http://k8s-default-ingresst-91fe9a8044-1507004944.ap-northeast-2.elb.amazonaws.com/api/v1/post/"+id, config)
                 .then((response) => {
                 setInfo((info) => info.filter((item) => item.post_id !== id));
                 }).catch((error) => {
@@ -120,7 +132,7 @@ function Board() {
           .catch((error) => {
             notification.open({
               message: "인증 실패!",
-              description: "다시 로그인을 확인해 주세요",
+              description: "다시 handleRemove를 확인해 주세요",
               icon: <FrownOutlined style={{ color: "#ff3333" }} />,
             });
           }); //재발급이 error가 난거면 진자 문제 생긴거임

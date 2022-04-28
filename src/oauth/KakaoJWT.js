@@ -5,6 +5,7 @@ import qs from "qs";
 import { useHistory } from "react-router-dom";
 import { message, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
+import { axiosInstance } from "components/api";
 
 const KakaoJWT = () => {
   const history = useHistory();
@@ -13,8 +14,8 @@ const KakaoJWT = () => {
   const payload = qs.stringify({
     accessToken: accessToken,
   });
-  axios
-    .post("http://localhost:8081/v1/kakaoLogin", payload)
+  axiosInstance
+    .post("/auth/kakaologin", payload)
     .then((response) => {
       console.log("갓성결");
       history.push("/");

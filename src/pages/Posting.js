@@ -17,10 +17,11 @@ import uml from "@toast-ui/editor-plugin-uml";
 
 import axios from "axios";
 import { getCookie } from "utils/cookies";
-
+import Header from "../components/headers/light";
 import { message, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
 import { axiosInstance } from "components/api";
+
 let config = {
   headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
 };
@@ -66,17 +67,18 @@ function Post() {
 
   // 최초 한 번만 실행(Constructor 역할)
   useEffect(() => {
+    let config = {
+      headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
+    };
     const editorInstance = editorRef.current.getInstance();
     console.log(editorInstance);
 
     async function initializingEditor() {
       if (isEdit) {
-        const result = await axiosInstance.get(
-          "/api/v1/post/" + selectedData.post_id
-          ,config
-        ).catch(
-          axiosInstance
-          .post("/auth/refreshtoken", localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
+        const result = await axiosInstance.get("/api/v1/post/" + selectedData.post_id,config)
+          // axios.get("http://k8s-default-ingresst-91fe9a8044-1507004944.ap-northeast-2.elb.amazonaws.com/api/v1/post/"+selectedData.post_id, config)
+        .catch(
+          axiosInstance.post("/auth/refreshtoken", localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
           .then((response) => {
             
             const token = response.data.data; // Token이 Access만 올수도, Access&Refresh가 같이 올수도있ㅇ듬
@@ -93,10 +95,12 @@ function Post() {
               localStorage.setItem("Access_token", token);
             }
             // 실패한 작업 재실행
-             axiosInstance.get(
-              "/api/v1/post/" + selectedData.post_id
-              ,config
-            ).then((response)=>{
+            let config = {
+              headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
+            };
+             axiosInstance.get("/api/v1/post/" + selectedData.post_id ,config)
+            // axios.get("http://k8s-default-ingresst-91fe9a8044-1507004944.ap-northeast-2.elb.amazonaws.com/api/v1/post/"+selectedData.post_id, config)
+            .then((response)=>{
               result= response;
             })
           })
@@ -136,18 +140,19 @@ function Post() {
 
     // console.log(form);
     if (isEdit) {
-      axiosInstance
-        .put("/api/v1/post/" + postId, form, config) //"주소", "데이터", "헤더"
+      let config = {
+        headers: { "X-AUTH-TOKEN": localStorage.getItem("Access_token") }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
+      };
+      axiosInstance.put("/api/v1/post/" + postId, form, config) //"주소", "데이터", "헤더"
+      // axios.put("http://k8s-default-ingresst-91fe9a8044-1507004944.ap-northeast-2.elb.amazonaws.com/api/v1/post/"+postId,form, config)
         .then(() => {
           history.push("/board");
         })
         .catch((error) => {
           console.log(error);
           //재발급 과정을 시작한다.
-            axiosInstance
-            .post("/auth/refreshtoken", localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
+            axiosInstance.post("/auth/refreshtoken", localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
             .then((response) => {
-              
               const token = response.data.data; // Token이 Access만 올수도, Access&Refresh가 같이 올수도있ㅇ듬
               console.log(token.charAt(0))
               if (token.charAt(0) =='[') {
@@ -163,9 +168,7 @@ function Post() {
               }
               //재발급 받은 토큰으로 작업 재 실행
               let config = {
-                headers: {
-                  "X-AUTH-TOKEN": localStorage.getItem("Access_token"),
-                }, 
+                headers: {"X-AUTH-TOKEN": localStorage.getItem("Access_token"),}, 
               };
               axiosInstance
                 .put(
@@ -173,6 +176,7 @@ function Post() {
                   form,
                   config
                 ) //"주소", "데이터", "헤더"
+              // axios.put("http://k8s-default-ingresst-91fe9a8044-1507004944.ap-northeast-2.elb.amazonaws.com/api/v1/post/"+postId, form, config)
                 .then(() => {
                   history.push("/board");
                 });
@@ -187,8 +191,8 @@ function Post() {
         });
     } else {
       console.log(form);
-      axiosInstance
-        .post("/api/v1/post", form, config)
+      axiosInstance.post("/api/v1/post", form, config)
+        // axios.post("http://k8s-default-ingresst-91fe9a8044-1507004944.ap-northeast-2.elb.amazonaws.com/api/v1/post/"+postId,form, config)
         .then(() => {
           setForm({
             ...form,
@@ -202,8 +206,7 @@ function Post() {
         })
         .catch((error) => {
          //재발급 과정을 시작한다.
-          axiosInstance
-          .post("/auth/refreshtoken", localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
+          axiosInstance.post("/auth/refreshtoken", localStorage.getItem("Refresh_token")) //에러 발생시 Access_token 재발급을 위해 Refresh Token을 담고 있는 path 경로로 post 요청
           .then((response) => {
             
             const token = response.data.data; // Token이 Access만 올수도, Access&Refresh가 같이 올수도있ㅇ듬
@@ -220,14 +223,15 @@ function Post() {
               localStorage.setItem("Access_token", token);
             }
               //재발급 받은 토큰으로 다시 실행
+              
               let config = {
                 headers: {
                   "X-AUTH-TOKEN": localStorage.getItem("Access_token"),
                 }, //반드시 헤더에 Access_Token을 담에서 보내야됨 그래야 Spring Security에서 확인
               };
               //post를 재 실행
-               axiosInstance
-                .post("/api/v1/post", form, config)
+               axiosInstance.post("/api/v1/post", form, config)
+              // axios.post("http://k8s-default-ingresst-91fe9a8044-1507004944.ap-northeast-2.elb.amazonaws.com/api/v1/post"+postId,form, config)
                 .then(() => {
                   setForm({
                     ...form,
@@ -252,18 +256,20 @@ function Post() {
   }
   return (
     <>
+    <Header />
       <div className="text-xl font-bold mt-5 mb-2 text-center">
         게시글 추가하기
       </div>
+      <div id="formCon" class="flex justify-center">
       <form
-        className="mt-5 flex flex-col justify-center"
+        className="mt-5 flex flex-col relative"
         onSubmit={handleSubmit}
       >
-        <div style={{ width: "30%" }}>
+        <div style={{ width: "70%" }}>
           {/* <Input className="w-24 mr-5" type="text" color="lightBlue" size="regular" outline={true} required placeholder="작성자"
                             name='user_id' value={form.user_id} onChange={handleChange}/> */}
           <Input
-            className="w-18 ml-5"
+            className="w-18 ml-5 relative"
             type="text"
             color="lightBlue"
             size="regular"
@@ -275,7 +281,7 @@ function Post() {
             onChange={handleChange}
           />
         </div>
-        <div className="mt-5 w-5/6 flex justify-center">
+        <div className="mt-10 w-5/6 flex justify-center relative">
           <Editor
             initialValue={isEdit ? form.content : ""}
             previewStyle="vertical"
@@ -296,7 +302,7 @@ function Post() {
             onChange={contentChange}
           />
         </div>
-        <div className="text-center flex justify-end">
+        <div id="buttons" className="text-center flex justify-end relative mt-10">
           <Button
             color="lightBlue"
             buttonType="outline"
@@ -323,6 +329,7 @@ function Post() {
           </Button>
         </div>
       </form>
+      </div>
     </>
   );
 }

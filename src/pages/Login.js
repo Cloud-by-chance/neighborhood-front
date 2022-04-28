@@ -5,7 +5,7 @@ import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
 import illustration from "images/login-illustration.svg";
-import logo from "images/logo.svg";
+import logo from "images/logo_team.png";
 import googleIconImageSrc from "images/google-icon.png";
 import kakaoIconImageSrc from "images/kakao-icon.png";
 import { KAKAO_AUTH_URL } from "../oauth/OAuth";
@@ -75,7 +75,7 @@ function Login() {
   };
 
   const onSubmit = (values) => {
-    async function fn() {
+    function fn() {
       values.preventDefault();
       console.log(values);
       const { id, password } = values; //submit시 보내지는 data를 username, password로 저장
@@ -85,10 +85,10 @@ function Login() {
       var headers = {
         "Content-Type": "application/json",
       };
-      await axiosInstance
+      axiosInstance
         .post("/auth/login", JSON.stringify(inputs), { headers })
         .then((response) => {
-          console.log("response:", response.data.data);
+          console.log("response:", response.data);
           localStorage.setItem("Response", response);
           const token = response.data.data.split(","); // access 토큰이랑 refresh 토큰이 주어진다. ,로 나눔
           //2 작업은 access token과 refresh 토큰의 정확한 값을 위해 사용
@@ -122,11 +122,11 @@ function Login() {
     illustrationImageSrc = illustration,
     headingText = "Sign In To 우리동네 정보통",
     socialButtons = [
-      {
-        iconImageSrc: googleIconImageSrc,
-        text: "Sign In With Google",
-        url: "https://google.com",
-      },
+      // {
+      //   iconImageSrc: googleIconImageSrc,
+      //   text: "Sign In With Google",
+      //   url: "https://google.com",
+      // },
       {
         iconImageSrc: kakaoIconImageSrc,
         text: "Sign In With Kakao",
