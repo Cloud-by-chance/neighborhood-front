@@ -11,7 +11,9 @@ import { getCookie, setCookie } from "../../utils/cookies";
 
 const Auth = () => {
   const REST_API_KEY = KAKAO_KEY;
-  const REDIRECT_URL = "http://localhost:3000/auth/kakao";
+  // const REDIRECT_URL = "http://localhost:3000/auth/kakao";
+  const REDIRECT_URL = "https://www.cloudbychance.com/auth/kakao";
+
   // calllback으로 받은 인가코드
   const code = new URL(window.location.href).searchParams.get("code");
   const history = useHistory();
