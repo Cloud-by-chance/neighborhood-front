@@ -8,6 +8,7 @@ import { axiosInstance } from "components/api";
 import { message, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
 import { getCookie, setCookie } from "../../utils/cookies";
+// import { REDIRECT_URL } from "../OAuth";
 
 const Auth = () => {
   const REST_API_KEY = KAKAO_KEY;
