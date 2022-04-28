@@ -8,10 +8,10 @@ import { axiosInstance } from "components/api";
 import { message, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
 import { getCookie, setCookie } from "../../utils/cookies";
+import { REDIRECT_URL } from "../OAuth";
 
 const Auth = () => {
   const REST_API_KEY = KAKAO_KEY;
-  const REDIRECT_URL = "http://localhost:3000/auth/kakao";
   // calllback으로 받은 인가코드
   const code = new URL(window.location.href).searchParams.get("code");
   const history = useHistory();
